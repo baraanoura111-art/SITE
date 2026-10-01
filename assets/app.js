@@ -383,10 +383,8 @@ function OasisPDF(jsPDF, A, spec){
     function show(){
       var p = P.filter(function(p){ return p.c === sc.value && String(p.b) === sb.value && p.s === ss.value; })[0]; if (!p) return;
       $("fpName").textContent = p.c + " · " + p.b + " BR · " + p.s;
-      var bua = (window.OASIS_FP_BUA || {})[p.c];
-      $("fpInfo").textContent = (bua ? p.c + " BUA " + bua + " sq ft · " : "") + "PDF, " + (p.kb >= 1024 ? (p.kb / 1024).toFixed(1) + " MB" : p.kb + " KB");
       dl.href = p.f; dl.setAttribute("download", "The Oasis - " + p.c + " " + p.b + "BR " + p.s.replace(" · ", " ") + " - floor plan.pdf");
-      dl.removeAttribute("target"); dl.textContent = "Download floor plan (PDF)";
+      dl.removeAttribute("target"); dl.textContent = "Download Floor Plan";
       $("fpNote").innerHTML = "";
       var a = document.createElement("a"); a.target = "_blank"; a.rel = "noopener";
       a.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Hi Baraa, I downloaded the floor plan for " + p.c + ", " + p.b + " BR " + p.s + ". Which units of this type are available?");
@@ -497,23 +495,21 @@ function OasisPDF(jsPDF, A, spec){
     var downTouched = false;
     ["mPrice"].forEach(function(id){ $(id).addEventListener("blur", function(){ fmtInput(this); mcalc(); }); });
     $("mDown").addEventListener("input", function(){ downTouched = this.value.trim() !== ""; });
-    function minDown(price, buyer){ var big = price > 5000000; return buyer === "national" ? (big ? 25 : 15) : (big ? 30 : 20); }
+    function minDown(price){ return price > 5000000 ? 30 : 20; }
     function mcalc(){
       var price = num($("mPrice").value);
       if (!price){ $("mResult").hidden = true; $("mEmpty").hidden = false; return; }
       $("mResult").hidden = false; $("mEmpty").hidden = true;
-      var buyer = $("mBuyer").value, min = minDown(price, buyer);
+      var min = minDown(price);
       var down = downTouched ? num($("mDown").value) : min;
       if (!downTouched) $("mDown").placeholder = "Minimum " + min + "%";
-      var warn = down < min ? "Banks require at least " + min + "% down for this price. The figures below use " + min + "%." : "";
-      if (down < min) down = min; if (down > 100) down = 100;
+      if (down < 0) down = 0; if (down > 100) down = 100;
       var loan = price * (1 - down / 100), r = num($("mRate").value) / 100 / 12, n = parseInt($("mTerm").value, 10) * 12;
       var pay = loan ? (r ? loan * r / (1 - Math.pow(1 + r, -n)) : loan / n) : 0;
       var interest = pay * n - loan;
       var dld = price * 0.04, reg = loan ? loan * 0.0025 + 290 : 0, arr = loan * 0.01 * 1.05, val = loan ? 3500 : 0, tr = 4200, ag = price * 0.021;
       var cash = price * down / 100 + dld + reg + arr + val + tr + ag;
       $("mMonthly").textContent = aed(pay); $("mCash").textContent = aed(cash);
-      $("mWarn").hidden = !warn; $("mWarn").textContent = warn;
       $("mrPrice").textContent = aed(price); $("mrDownLbl").textContent = "Down payment (" + (Math.round(down * 10) / 10) + "%)";
       $("mrDown").textContent = aed(price * down / 100); $("mrLoan").textContent = aed(loan); $("mrInt").textContent = aed(interest);
       $("mrDld").textContent = aed(dld); $("mrReg").textContent = aed(reg); $("mrArr").textContent = aed(arr); $("mrVal").textContent = aed(val);
@@ -679,9 +675,9 @@ function OasisPDF(jsPDF, A, spec){
     {id:"calculators", title:"Tools", s:["calculators"]},
     {id:"finder", title:"Oasis Villa Finder", s:["finder"], parent:"calculators"},
     {id:"compare", title:"Compare Clusters", s:["compare"], parent:"calculators"},
-    {id:"fees", title:"Purchase fee calculator", s:["fees"], parent:"calculators"},
-    {id:"yield", title:"Rental yield estimator", s:["yield"], parent:"calculators"},
-    {id:"mortgage", title:"Mortgage calculator", s:["mortgage"], parent:"calculators"},
+    {id:"fees", title:"Purchase Fee Calculator", s:["fees"], parent:"calculators"},
+    {id:"yield", title:"Rental Yield Estimator", s:["yield"], parent:"calculators"},
+    {id:"mortgage", title:"Mortgage Calculator", s:["mortgage"], parent:"calculators"},
     {id:"articles", title:"Articles", s:["articles"]},
     {id:"art-clusters", title:"Article", s:["art-clusters"], parent:"articles"},
     {id:"art-invest", title:"Article", s:["art-invest"], parent:"articles"},

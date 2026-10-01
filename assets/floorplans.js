@@ -5,497 +5,497 @@ window.OASIS_FLOORPLANS = [
 "b": 4,
 "s": "Chamfered",
 "f": "/floorplans/palmiera-1-4br-chamfered.pdf",
-"kb": 1807
+"kb": 1004
 },
 {
 "c": "Palmiera 1",
 "b": 4,
 "s": "Classical",
 "f": "/floorplans/palmiera-1-4br-classical.pdf",
-"kb": 1681
+"kb": 877
 },
 {
 "c": "Palmiera 1",
 "b": 4,
 "s": "Contemporary",
 "f": "/floorplans/palmiera-1-4br-contemporary.pdf",
-"kb": 1858
+"kb": 1043
 },
 {
 "c": "Palmiera 1",
 "b": 5,
 "s": "Chamfered",
 "f": "/floorplans/palmiera-1-5br-chamfered.pdf",
-"kb": 1674
+"kb": 883
 },
 {
 "c": "Palmiera 1",
 "b": 5,
 "s": "Classical Type 1",
 "f": "/floorplans/palmiera-1-5br-classical-type-1.pdf",
-"kb": 1957
+"kb": 1003
 },
 {
 "c": "Palmiera 1",
 "b": 5,
 "s": "Classical Type 2",
 "f": "/floorplans/palmiera-1-5br-classical-type-2.pdf",
-"kb": 1646
+"kb": 859
 },
 {
 "c": "Palmiera 1",
 "b": 5,
 "s": "Contemporary",
 "f": "/floorplans/palmiera-1-5br-contemporary.pdf",
-"kb": 1972
+"kb": 1015
 },
 {
 "c": "Palmiera 2",
 "b": 4,
 "s": "Chamfered",
 "f": "/floorplans/palmiera-2-4br-chamfered.pdf",
-"kb": 1322
+"kb": 780
 },
 {
 "c": "Palmiera 2",
 "b": 4,
 "s": "Classical",
 "f": "/floorplans/palmiera-2-4br-classical.pdf",
-"kb": 1318
+"kb": 780
 },
 {
 "c": "Palmiera 2",
 "b": 4,
 "s": "Contemporary",
 "f": "/floorplans/palmiera-2-4br-contemporary.pdf",
-"kb": 1337
+"kb": 788
 },
 {
 "c": "Palmiera 3",
 "b": 4,
 "s": "Chamfered",
 "f": "/floorplans/palmiera-3-4br-chamfered.pdf",
-"kb": 3104
+"kb": 1089
 },
 {
 "c": "Palmiera 3",
 "b": 4,
 "s": "Classical",
 "f": "/floorplans/palmiera-3-4br-classical.pdf",
-"kb": 3111
+"kb": 1087
 },
 {
 "c": "Palmiera 3",
 "b": 4,
 "s": "Contemporary",
 "f": "/floorplans/palmiera-3-4br-contemporary.pdf",
-"kb": 3140
+"kb": 1092
 },
 {
 "c": "Palmiera Collective",
 "b": 4,
 "s": "Chamfered · with basement",
 "f": "/floorplans/palmiera-collective-4br-chamfered-with-basement.pdf",
-"kb": 2528
+"kb": 1621
 },
 {
 "c": "Palmiera Collective",
 "b": 4,
 "s": "Classical · with basement",
 "f": "/floorplans/palmiera-collective-4br-classical-with-basement.pdf",
-"kb": 3423
+"kb": 1651
 },
 {
 "c": "Palmiera Collective",
 "b": 4,
 "s": "Contemporary · with basement",
 "f": "/floorplans/palmiera-collective-4br-contemporary-with-basement.pdf",
-"kb": 2516
+"kb": 1652
 },
 {
 "c": "Mirage",
 "b": 5,
 "s": "Chamfered · Drop",
 "f": "/floorplans/mirage-5br-chamfered-drop.pdf",
-"kb": 1470
+"kb": 1093
 },
 {
 "c": "Mirage",
 "b": 5,
 "s": "Chamfered · Flat",
 "f": "/floorplans/mirage-5br-chamfered-flat.pdf",
-"kb": 1577
+"kb": 1035
 },
 {
 "c": "Mirage",
 "b": 5,
 "s": "Classical · Flat",
 "f": "/floorplans/mirage-5br-classical-flat.pdf",
-"kb": 1534
+"kb": 1007
 },
 {
 "c": "Mirage",
 "b": 5,
 "s": "Contemporary · Drop",
 "f": "/floorplans/mirage-5br-contemporary-drop.pdf",
-"kb": 1470
+"kb": 1103
 },
 {
 "c": "Mirage",
 "b": 5,
 "s": "Contemporary · Flat",
 "f": "/floorplans/mirage-5br-contemporary-flat.pdf",
-"kb": 1530
+"kb": 994
 },
 {
 "c": "Mirage",
 "b": 6,
 "s": "Chamfered · Drop",
 "f": "/floorplans/mirage-6br-chamfered-drop.pdf",
-"kb": 1188
+"kb": 1057
 },
 {
 "c": "Mirage",
 "b": 6,
 "s": "Chamfered · Flat",
 "f": "/floorplans/mirage-6br-chamfered-flat.pdf",
-"kb": 1270
+"kb": 1130
 },
 {
 "c": "Mirage",
 "b": 6,
 "s": "Contemporary · Drop",
 "f": "/floorplans/mirage-6br-contemporary-drop.pdf",
-"kb": 1215
+"kb": 1082
 },
 {
 "c": "Mirage",
 "b": 6,
 "s": "Contemporary · Flat",
 "f": "/floorplans/mirage-6br-contemporary-flat.pdf",
-"kb": 1299
+"kb": 1162
 },
 {
 "c": "Lavita",
 "b": 6,
 "s": "Faya",
 "f": "/floorplans/lavita-6br-faya.pdf",
-"kb": 1089
+"kb": 548
 },
 {
 "c": "Lavita",
 "b": 6,
 "s": "Naya",
 "f": "/floorplans/lavita-6br-naya.pdf",
-"kb": 1087
+"kb": 548
 },
 {
 "c": "Lavita",
 "b": 7,
 "s": "Aman",
 "f": "/floorplans/lavita-7br-aman.pdf",
-"kb": 1207
+"kb": 788
 },
 {
 "c": "Lavita",
 "b": 7,
 "s": "Ayanna",
 "f": "/floorplans/lavita-7br-ayanna.pdf",
-"kb": 1281
+"kb": 822
 },
 {
 "c": "Marèva",
 "b": 4,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-4br-chamfered-with-basement.pdf",
-"kb": 693
+"kb": 677
 },
 {
 "c": "Marèva",
 "b": 4,
 "s": "Classical · with basement",
 "f": "/floorplans/mareva-4br-classical-with-basement.pdf",
-"kb": 696
+"kb": 680
 },
 {
 "c": "Marèva",
 "b": 4,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-4br-contemporary-with-basement.pdf",
-"kb": 693
+"kb": 676
 },
 {
 "c": "Marèva",
 "b": 5,
 "s": "Chamfered",
 "f": "/floorplans/mareva-5br-chamfered.pdf",
-"kb": 752
+"kb": 738
 },
 {
 "c": "Marèva",
 "b": 5,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-5br-chamfered-with-basement.pdf",
-"kb": 682
+"kb": 664
 },
 {
 "c": "Marèva",
 "b": 5,
 "s": "Classical · with basement",
 "f": "/floorplans/mareva-5br-classical-with-basement.pdf",
-"kb": 683
+"kb": 664
 },
 {
 "c": "Marèva",
 "b": 5,
 "s": "Contemporary",
 "f": "/floorplans/mareva-5br-contemporary.pdf",
-"kb": 760
+"kb": 746
 },
 {
 "c": "Marèva",
 "b": 5,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-5br-contemporary-with-basement.pdf",
-"kb": 683
+"kb": 666
 },
 {
 "c": "Marèva",
 "b": 6,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-6br-chamfered-with-basement.pdf",
-"kb": 590
+"kb": 526
 },
 {
 "c": "Marèva",
 "b": 6,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-6br-contemporary-with-basement.pdf",
-"kb": 601
+"kb": 537
 },
 {
 "c": "Marèva 2",
 "b": 4,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-2-4br-chamfered-with-basement.pdf",
-"kb": 695
+"kb": 679
 },
 {
 "c": "Marèva 2",
 "b": 4,
 "s": "Classical · with basement",
 "f": "/floorplans/mareva-2-4br-classical-with-basement.pdf",
-"kb": 698
+"kb": 682
 },
 {
 "c": "Marèva 2",
 "b": 4,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-2-4br-contemporary-with-basement.pdf",
-"kb": 694
+"kb": 677
 },
 {
 "c": "Marèva 2",
 "b": 5,
 "s": "Chamfered",
 "f": "/floorplans/mareva-2-5br-chamfered.pdf",
-"kb": 755
+"kb": 740
 },
 {
 "c": "Marèva 2",
 "b": 5,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-2-5br-chamfered-with-basement.pdf",
-"kb": 684
+"kb": 666
 },
 {
 "c": "Marèva 2",
 "b": 5,
 "s": "Classical · with basement",
 "f": "/floorplans/mareva-2-5br-classical-with-basement.pdf",
-"kb": 685
+"kb": 666
 },
 {
 "c": "Marèva 2",
 "b": 5,
 "s": "Contemporary",
 "f": "/floorplans/mareva-2-5br-contemporary.pdf",
-"kb": 762
+"kb": 748
 },
 {
 "c": "Marèva 2",
 "b": 5,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-2-5br-contemporary-with-basement.pdf",
-"kb": 685
+"kb": 667
 },
 {
 "c": "Marèva 2",
 "b": 6,
 "s": "Chamfered · with basement",
 "f": "/floorplans/mareva-2-6br-chamfered-with-basement.pdf",
-"kb": 592
+"kb": 528
 },
 {
 "c": "Marèva 2",
 "b": 6,
 "s": "Contemporary · with basement",
 "f": "/floorplans/mareva-2-6br-contemporary-with-basement.pdf",
-"kb": 603
+"kb": 538
 },
 {
 "c": "Address Villas Tierra",
 "b": 4,
 "s": "Chamfered · with basement",
 "f": "/floorplans/address-villas-tierra-4br-chamfered-with-basement.pdf",
-"kb": 1464
+"kb": 1071
 },
 {
 "c": "Address Villas Tierra",
 "b": 4,
 "s": "Classical · with basement",
 "f": "/floorplans/address-villas-tierra-4br-classical-with-basement.pdf",
-"kb": 1481
+"kb": 1080
 },
 {
 "c": "Address Villas Tierra",
 "b": 4,
 "s": "Contemporary · with basement",
 "f": "/floorplans/address-villas-tierra-4br-contemporary-with-basement.pdf",
-"kb": 1470
+"kb": 1074
 },
 {
 "c": "Address Villas Tierra",
 "b": 5,
 "s": "Chamfered",
 "f": "/floorplans/address-villas-tierra-5br-chamfered.pdf",
-"kb": 1634
+"kb": 1187
 },
 {
 "c": "Address Villas Tierra",
 "b": 5,
 "s": "Chamfered · with basement",
 "f": "/floorplans/address-villas-tierra-5br-chamfered-with-basement.pdf",
-"kb": 1875
+"kb": 1088
 },
 {
 "c": "Address Villas Tierra",
 "b": 5,
 "s": "Classical · with basement",
 "f": "/floorplans/address-villas-tierra-5br-classical-with-basement.pdf",
-"kb": 1864
+"kb": 1086
 },
 {
 "c": "Address Villas Tierra",
 "b": 5,
 "s": "Contemporary",
 "f": "/floorplans/address-villas-tierra-5br-contemporary.pdf",
-"kb": 1676
+"kb": 1198
 },
 {
 "c": "Address Villas Tierra",
 "b": 5,
 "s": "Contemporary · with basement",
 "f": "/floorplans/address-villas-tierra-5br-contemporary-with-basement.pdf",
-"kb": 1881
+"kb": 1088
 },
 {
 "c": "Address Villas Tierra",
 "b": 6,
 "s": "Chamfered · with basement",
 "f": "/floorplans/address-villas-tierra-6br-chamfered-with-basement.pdf",
-"kb": 1433
+"kb": 1132
 },
 {
 "c": "Address Villas Tierra",
 "b": 6,
 "s": "Contemporary · with basement",
 "f": "/floorplans/address-villas-tierra-6br-contemporary-with-basement.pdf",
-"kb": 1439
+"kb": 1140
 },
 {
 "c": "Palace Villas Ostra",
 "b": 4,
 "s": "Chamfered · with basement",
 "f": "/floorplans/palace-villas-ostra-4br-chamfered-with-basement.pdf",
-"kb": 832
+"kb": 829
 },
 {
 "c": "Palace Villas Ostra",
 "b": 4,
 "s": "Classical · with basement",
 "f": "/floorplans/palace-villas-ostra-4br-classical-with-basement.pdf",
-"kb": 839
+"kb": 837
 },
 {
 "c": "Palace Villas Ostra",
 "b": 4,
 "s": "Contemporary · with basement",
 "f": "/floorplans/palace-villas-ostra-4br-contemporary-with-basement.pdf",
-"kb": 831
+"kb": 829
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Chamfered",
 "f": "/floorplans/palace-villas-ostra-5br-chamfered.pdf",
-"kb": 913
+"kb": 910
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Chamfered · Drop",
 "f": "/floorplans/palace-villas-ostra-5br-chamfered-drop.pdf",
-"kb": 826
+"kb": 823
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Chamfered · with basement",
 "f": "/floorplans/palace-villas-ostra-5br-chamfered-with-basement.pdf",
-"kb": 808
+"kb": 805
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Classical · with basement",
 "f": "/floorplans/palace-villas-ostra-5br-classical-with-basement.pdf",
-"kb": 806
+"kb": 803
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Contemporary",
 "f": "/floorplans/palace-villas-ostra-5br-contemporary.pdf",
-"kb": 919
+"kb": 916
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Contemporary · Drop",
 "f": "/floorplans/palace-villas-ostra-5br-contemporary-drop.pdf",
-"kb": 819
+"kb": 817
 },
 {
 "c": "Palace Villas Ostra",
 "b": 5,
 "s": "Contemporary · with basement",
 "f": "/floorplans/palace-villas-ostra-5br-contemporary-with-basement.pdf",
-"kb": 815
+"kb": 813
 },
 {
 "c": "Palace Villas Ostra",
 "b": 6,
 "s": "Chamfered · with basement",
 "f": "/floorplans/palace-villas-ostra-6br-chamfered-with-basement.pdf",
-"kb": 616
+"kb": 613
 },
 {
 "c": "Palace Villas Ostra",
 "b": 6,
 "s": "Contemporary · with basement",
 "f": "/floorplans/palace-villas-ostra-6br-contemporary-with-basement.pdf",
-"kb": 626
+"kb": 623
 }
 ];
 window.OASIS_FP_BUA = {"Palmiera 1": "5,843–8,689", "Palmiera 2": "5,627–5,872", "Palmiera 3": "5,666–5,914", "Palmiera Collective": "7,879–8,099", "Mirage": "10,225–12,967", "Lavita": "19,012–29,915", "Marèva": "7,254–12,986", "Marèva 2": "7,254–12,986", "Address Villas Tierra": "7,269–12,959", "Palace Villas Ostra": "7,269–12,959"};
