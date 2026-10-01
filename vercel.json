@@ -1,5 +1,12 @@
 {
   "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/clusters/palmiera/",
+      "destination": "/clusters/palmiera-1/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
