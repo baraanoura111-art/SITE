@@ -5,6 +5,11 @@
       "source": "/clusters/palmiera/",
       "destination": "/clusters/palmiera-1/",
       "permanent": true
+    },
+    {
+      "source": "/articles/the-oasis-clusters-at-a-glance/",
+      "destination": "/articles/why-the-oasis/",
+      "permanent": true
     }
   ],
   "headers": [

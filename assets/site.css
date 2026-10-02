@@ -1101,6 +1101,16 @@ nav.links{display:flex;gap:6px;align-items:center;margin-left:auto}
 #nextlaunch .art-wrap{margin-left:auto !important;margin-right:auto !important;max-width:760px}
 #nextlaunch .art-list{list-style:none;padding:0}
 #nextlaunch .art-wrap h2,#nextlaunch .art-wrap h1,#nextlaunch .art-kicker,#nextlaunch .art-meta{text-align:center}#nextlaunch .art-wrap h1{text-align:center}
+.art-sign{text-align:center;margin-top:28px;color:var(--ink)}
+.fp-box{border:1px solid var(--line);background:var(--surface);padding:32px 28px;max-width:880px;margin:0 auto}
+.fp-box .fp-result{border:0;background:transparent;padding:20px 0 0;margin-top:10px}
+#gallery .car{max-width:760px;margin-left:auto;margin-right:auto}
+.hdr-btns{display:flex;gap:10px;align-items:center}
+.hdr-ch{border:1px solid var(--brass);color:var(--brass) !important;background:transparent;font-size:12.5px;letter-spacing:.1em;padding:0 16px;min-height:40px;display:inline-flex;align-items:center;text-decoration:none;white-space:nowrap}
+.hdr-ch:hover{background:var(--brass);color:var(--bg) !important}@media (max-width:860px){.hdr-ch{display:none !important}}
+.lp-media{max-width:720px;margin:0 auto 30px !important}
+.lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
+
 .lp-intro{margin:6px auto 0;text-align:center}
 .lp-intro p{text-align:center}
 .lp-facts{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
