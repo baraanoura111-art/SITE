@@ -271,7 +271,7 @@ function OasisPDF(jsPDF, A, spec){
   var fy = H - 70;
   J.setDrawColor(LINE[0],LINE[1],LINE[2]); J.setLineWidth(0.6); J.line(M, fy, W-M, fy);
   f("normal", 10); col(INK); J.text("Baraa Noura  ·  The Oasis Specialist", W/2, fy + 22, {align:"center"});
-  f("light", 9); col(MUTED); J.text("AX Capital Real Estate  ·  BRN 70439", W/2, fy + 36, {align:"center"});
+  f("light", 9); col(MUTED); J.text("AX CAPITAL Real Estate  ·  BRN 70439", W/2, fy + 36, {align:"center"});
   col(SAGE2); J.text("+971 52 132 52 15   ·   b.noura@axcapital.ae   ·   @baraa.oasis", W/2, fy + 50, {align:"center"});
   return J;
 }
@@ -676,16 +676,18 @@ function OasisPDF(jsPDF, A, spec){
   })();
 
   // page router: one topic per screen (articles and clusters also have their own URLs)
-  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "mortgage": "/tools/mortgage-calculator/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/", "nextlaunch": "/articles/valoria-next-launch-in-the-oasis/", "art-styles": "/articles/villa-styles-in-the-oasis/"};
+  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "mortgage": "/tools/mortgage-calculator/", "factsheet": "/fact-sheet/", "construction": "/construction-update/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/", "nextlaunch": "/articles/valoria-next-launch-in-the-oasis/"};
   var ROUTE = (document.querySelector('meta[name="oasis-route"]') || {}).content || "";
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
   var PAGES = [
     {id:"home", title:"Home", s:["factsheet","explore","links","contact"]},
-    {id:"community", title:"Explore Oasis", s:["community"]},
-    {id:"overview", title:"Overview", s:["overview","location","factsheet"], parent:"community"},
-    {id:"clusters", title:"Clusters", s:["clusters"], parent:"community"},
-    {id:"styles", title:"Style & Floorplan", s:["styles","floorplans"], parent:"community"},
-    {id:"gallery", title:"Gallery", s:["gallery"], parent:"community"},
+    {id:"overview", title:"Overview", s:["overview","location","factsheet"]},
+    {id:"location", title:"Location", s:["location"], parent:"overview"},
+    {id:"clusters", title:"Clusters", s:["clusters"]},
+    {id:"construction", title:"Construction Update", s:["construction"]},
+    {id:"factsheet", title:"Oasis Fact Sheet", s:["factsheet"]},
+    {id:"styles", title:"Style & Floorplan", s:["styles","floorplans"]},
+    {id:"gallery", title:"Gallery", s:["gallery"]},
     {id:"calculators", title:"Tools", s:["calculators"]},
     {id:"finder", title:"Oasis Villa Finder", s:["finder"], parent:"calculators"},
     {id:"compare", title:"Compare Clusters", s:["compare"], parent:"calculators"},
@@ -693,7 +695,7 @@ function OasisPDF(jsPDF, A, spec){
     {id:"yield", title:"Rental Yield Estimator", s:["yield"], parent:"calculators"},
     {id:"mortgage", title:"Mortgage Calculator", s:["mortgage"], parent:"calculators"},
     {id:"articles", title:"Articles", s:["articles"]},
-    {id:"art-clusters", title:"Why The Oasis? Why I Chose To Specialise Here", s:["art-clusters"], parent:"articles"},
+    {id:"art-clusters", title:"Why The Oasis? Why I Chose To Specialize Here", s:["art-clusters"], parent:"articles"},
     {id:"art-invest", title:"Is The Oasis a Good Investment?", s:["art-invest"], parent:"articles"},
     {id:"art-buying", title:"How Buying a Villa in The Oasis Works", s:["art-buying"], parent:"articles"},
     {id:"art-costs", title:"What It Costs To Buy a Villa in The Oasis", s:["art-costs"], parent:"articles"},
@@ -703,7 +705,6 @@ function OasisPDF(jsPDF, A, spec){
     {id:"art-golf", title:"Golf Courses Near The Oasis", s:["art-golf"], parent:"articles"},
     {id:"art-polo", title:"Polo and Equestrian Clubs Near The Oasis", s:["art-polo"], parent:"articles"},
     {id:"nextlaunch", title:"Next Launch in The Oasis: Valoria", s:["nextlaunch"], parent:"articles"},
-    {id:"art-styles", title:"Chamfered, Classical or Contemporary?", s:["art-styles"], parent:"articles"},
     {id:"lp-palmiera-1", title:"Palmiera 1", s:["lp-palmiera-1"], parent:"clusters"},
     {id:"lp-palmiera-2", title:"Palmiera 2", s:["lp-palmiera-2"], parent:"clusters"},
     {id:"lp-palmiera-3", title:"Palmiera 3", s:["lp-palmiera-3"], parent:"clusters"},
@@ -721,7 +722,7 @@ function OasisPDF(jsPDF, A, spec){
   ];
   var hero = document.querySelector("section.hero");
   var allSecs = document.querySelectorAll("main > section.block");
-  function pageOf(sec){ for (var i = 0; i < PAGES.length; i++) if (PAGES[i].s.indexOf(sec) > -1) return i; return 0; }
+  function pageOf(sec){ for (var q = 0; q < PAGES.length; q++){ if (PAGES[q].id === sec) return q; } for (var i = 0; i < PAGES.length; i++) if (PAGES[i].s.indexOf(sec) > -1) return i; return 0; }
   function route(){
     (function(){ var fsx = $("factsheet"), hh = decodeURIComponent(location.hash.replace("#","")) || ROUTE; if (!fsx) return; if ((!hh || hh === "top" || hh === "home") && $("explore")) $("explore").before(fsx); else if ($("location")) $("location").after(fsx); })();
     var h = decodeURIComponent(location.hash.replace("#","")) || ROUTE, idx = 0, target = null;

@@ -10,6 +10,11 @@
       "source": "/articles/the-oasis-clusters-at-a-glance/",
       "destination": "/articles/why-the-oasis/",
       "permanent": true
+    },
+    {
+      "source": "/articles/villa-styles-in-the-oasis/",
+      "destination": "/articles/",
+      "permanent": true
     }
   ],
   "headers": [
