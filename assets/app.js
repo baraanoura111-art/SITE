@@ -406,10 +406,12 @@ function OasisPDF(jsPDF, A, spec){
   document.querySelectorAll(".car").forEach(function(car){
     var track = car.querySelector(".car-track"), sl = track.querySelectorAll(".slide"), cnt = car.querySelector(".car-count"), cur = 0, st;
     if (sl.length < 2) return;
-    function go(k){ k = (k + sl.length) % sl.length; track.scrollTo({left: sl[k].offsetLeft - track.offsetLeft, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); }
+    function go(k){ sl = track.querySelectorAll(".slide"); k = (k + sl.length) % sl.length; track.scrollTo({left: sl[k].offsetLeft - track.offsetLeft, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); }
     car.querySelectorAll(".car-btn").forEach(function(btn){ btn.addEventListener("click", function(){ go(cur + parseInt(btn.getAttribute("data-dir"), 10)); }); });
     track.addEventListener("keydown", function(e){ if (e.key === "ArrowRight"){ e.preventDefault(); go(cur + 1); } if (e.key === "ArrowLeft"){ e.preventDefault(); go(cur - 1); } });
+    window.addEventListener("load", function(){ sl = track.querySelectorAll(".slide"); if (cnt) cnt.textContent = "1 / " + sl.length; });
     track.addEventListener("scroll", function(){ clearTimeout(st); st = setTimeout(function(){
+      sl = track.querySelectorAll(".slide");
       cur = Math.max(0, Math.min(sl.length - 1, Math.round(track.scrollLeft / sl[0].offsetWidth)));
       if (cnt) cnt.textContent = (cur + 1) + " / " + sl.length; }, 60); });
   });
@@ -767,6 +769,15 @@ function OasisPDF(jsPDF, A, spec){
     }); });
   });
 
+  if ($("svcForm")) $("svcForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = $("sfName").value.trim(), hint = $("sfHint"), phone = $("sfPhone").value.trim(), need = $("sfNeed").value;
+    if (!name){ hint.textContent = "Add your name so I know who's writing."; $("sfName").focus(); return; }
+    var msg = "Hi Baraa, I'm " + name + ". I'm interested in: " + need + "." + (phone ? "\nMy number: " + phone : "");
+    if (window.saveLead) window.saveLead("Services form", name, phone, "Interested in: " + need);
+    hint.textContent = "Opening WhatsApp…";
+    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+  });
   $("leadForm").addEventListener("submit", function(e){
     e.preventDefault();
     var name = $("lName").value.trim(), hint = $("formHint");
@@ -781,6 +792,7 @@ function OasisPDF(jsPDF, A, spec){
   });
 })();
 
+  document.querySelectorAll(".lp-fp-select").forEach(function(sel){ var dl = sel.closest(".lp-fps").querySelector(".lp-fp-dl"); function upd(){ var o = sel.options[sel.selectedIndex]; dl.href = o.value; dl.setAttribute("download", o.getAttribute("data-dl")); } sel.addEventListener("change", upd); upd(); });
   document.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".lp-find"); if (!b || !window.ufApply) return; window.ufApply({c: b.getAttribute("data-uf")}); location.hash = "finder"; });
 
 /* Welcome card + newsletter signup.

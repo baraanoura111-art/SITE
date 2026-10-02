@@ -1033,7 +1033,6 @@ nav.links{display:flex;gap:6px;align-items:center;margin-left:auto}
 .nav-top svg{width:10px;height:7px;opacity:.7;transition:transform .2s}
 .nav-dd:hover .nav-top svg,.nav-dd:focus-within .nav-top svg{transform:rotate(180deg)}
 .nav-dd .dd{position:absolute;top:100%;left:0;min-width:250px;list-style:none;margin:0;padding:10px 0;background:var(--surface);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35);opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s,transform .18s,visibility .18s;z-index:40}
-.nav-dd:last-child .dd{left:auto;right:0}
 .nav-dd:hover .dd,.nav-dd:focus-within .dd{opacity:1;visibility:visible;transform:none}
 .nav-dd .dd a{display:block;padding:10px 20px;color:var(--muted) !important;font-size:14.5px;letter-spacing:.02em;text-decoration:none;white-space:nowrap}
 .nav-dd .dd a:hover,.nav-dd .dd a:focus{color:var(--ink) !important;background:color-mix(in srgb,var(--brass) 10%,transparent)}@media (min-width:861px){.menu-btn{display:none !important}}@media (max-width:860px){nav.links{display:none !important}}
@@ -1074,6 +1073,43 @@ nav.links{display:flex;gap:6px;align-items:center;margin-left:auto}
 .tm-dots button{width:8px;height:8px;padding:0;border-radius:50%;border:0;background:var(--line);cursor:pointer}
 .tm-dots button[aria-current="true"]{background:var(--brass)}
 .about .tm-s blockquote{color:var(--ink) !important;font-size:17px !important;border:0 !important;padding:0 !important;font-family:var(--body) !important}
+
+/* brand: same font and colour as the hero logo */
+.brand b{font-family:"Poppins",var(--display) !important;font-weight:300 !important;font-size:18px !important;letter-spacing:.2em !important;color:var(--water) !important;text-transform:uppercase}
+.brand span{font-family:"Poppins",var(--display) !important;font-weight:300 !important;font-size:10.5px !important;letter-spacing:.42em !important;color:var(--water) !important;text-transform:uppercase;margin-top:3px}
+
+.svc-form{margin-top:56px;max-width:760px;margin-left:auto;margin-right:auto;grid-template-columns:1fr !important}
+.svc-form .intro{text-align:center}
+.svc-form h2{font-size:clamp(26px,3.2vw,34px)}
+.svc-form h2::before{display:none !important}
+#contact .disclaimer{margin-top:72px;margin-bottom:0}
+
+.cc.cc-s{flex:0 0 calc((100% - 32px) / 3) !important}@media (max-width:900px){.cc.cc-s{flex-basis:calc((100% - 16px) / 2) !important}}@media (max-width:520px){.cc.cc-s{flex-basis:78% !important}}
+
+#nextlaunch .art-wrap{text-align:center}
+#nextlaunch .art-wrap p,#nextlaunch .art-wrap ul{margin-left:auto;margin-right:auto}
+#nextlaunch .art-wrap .stats,#nextlaunch .art-wrap .tbl{margin-left:auto;margin-right:auto}
+#nextlaunch .cp{margin-left:auto;margin-right:auto;align-items:center}
+
+/* larger centred construction bar on cluster pages and Valoria */
+.lp-cp,#nextlaunch .cp{align-items:center;text-align:center;max-width:560px}
+.lp-cp .cp-row,#nextlaunch .cp-row{grid-template-columns:1fr;justify-items:center;gap:10px;font-size:15px}
+.lp-cp .cp-bar,#nextlaunch .cp-bar{width:min(440px,86vw);height:8px;border-radius:4px}
+.lp-cp .cp-src,#nextlaunch .cp-src{margin-top:4px}
+.about{grid-template-columns:minmax(0,1fr) !important}.about > *,.tm,.tm-track,.recog{min-width:0;max-width:100%}
+.hero .lede{max-width:760px !important;margin-left:auto;margin-right:auto}
+#nextlaunch .art-wrap{margin-left:auto !important;margin-right:auto !important;max-width:760px}
+#nextlaunch .art-list{list-style:none;padding:0}
+#nextlaunch .art-wrap h2,#nextlaunch .art-wrap h1,#nextlaunch .art-kicker,#nextlaunch .art-meta{text-align:center}#nextlaunch .art-wrap h1{text-align:center}
+.lp-intro{margin:6px auto 0;text-align:center}
+.lp-intro p{text-align:center}
+.lp-facts{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+@media (max-width:700px){.lp-facts dd{font-size:15px !important}.lp-facts dt{font-size:10.5px;letter-spacing:.1em}.lp-facts div{padding:14px 4px}}
+.lp-fps{display:flex !important;flex-direction:column;align-items:center;gap:18px}
+.lp-fpsel{width:100%;max-width:480px}
+.lp-fpsel label{display:block;font-size:12px;letter-spacing:.14em;color:var(--muted);margin-bottom:6px;text-align:left}
+.lp-fp-dl{background:var(--brass) !important;color:var(--bg) !important}
+
 .art-meta{text-align:center;color:var(--muted);font-size:13.5px;letter-spacing:.06em;margin:-6px 0 18px}
 .art-author{display:flex;gap:18px;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;margin:48px 0 0}
 .art-author img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;filter:grayscale(1)}
