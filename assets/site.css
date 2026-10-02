@@ -1134,6 +1134,7 @@ nav.links{display:flex;gap:6px;align-items:center;margin-left:auto}
 .article .art-sign{margin:36px 0 36px !important}
 .article .art-cta{margin:36px 0 56px !important;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .article .art-author{margin-top:56px !important}@media (max-width:640px){.article .art-wrap{padding-left:20px;padding-right:20px}.article .art-wrap p,.article .art-wrap li{font-size:16.5px}.article .art-lede{font-size:17px}}@media (max-width:640px){.article .art-wrap h1,.article .art-wrap > h2:first-of-type{font-size:24px !important}.article .art-wrap > h1:first-of-type{font-size:24px !important}.article .art-meta{font-size:12.5px !important}}
+#pageNav{display:none !important}
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 
