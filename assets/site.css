@@ -1139,6 +1139,23 @@ nav.links{display:flex;gap:6px;align-items:center;margin-left:auto}
 #gallery video{display:block;width:100%;max-width:760px;margin-left:auto;margin-right:auto}
 #gallery .vid,#gallery .video,#gallery figure:has(video){max-width:760px;margin-left:auto;margin-right:auto}
 .f-priv{margin-top:14px;align-self:center;font-size:12px;letter-spacing:.1em;min-height:36px;padding:0 16px}
+.gal-video-m{max-width:760px;margin:0 auto 34px;border:1px solid var(--line);background:#000;aspect-ratio:16/9}.gal-video-m video{display:block;width:100%;height:100%;object-fit:cover}
+.hub.hub4{grid-template-columns:repeat(3,minmax(0,1fr)) !important}@media (max-width:640px){.hub.hub4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+/* compare villas */
+.cv-pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1000px;margin:0 auto 26px}
+.cv-slot{border:1px solid var(--line);background:var(--surface);padding:16px 16px 10px}
+.cv-slot .cv-h{font-size:12px;letter-spacing:.16em;color:var(--brass);margin:0 0 8px}
+.cv-slot label{display:block;font-size:11.5px;letter-spacing:.12em;color:var(--muted);margin:6px 0 2px}
+.cv-tbl{max-width:1000px;margin:0 auto}
+.cv-tbl th[scope=row]{color:var(--muted);font-weight:400;font-size:13px;letter-spacing:.06em;text-align:left;white-space:nowrap}
+.cv-tbl td{text-align:center}
+.cv-tbl thead th{font-family:var(--display);font-size:19px;color:var(--ink);font-weight:300}
+.cv-tbl td.cv-best{background:color-mix(in srgb,var(--brass) 20%,transparent);color:var(--ink);font-weight:500}
+.cv-tbl td a{color:var(--brass);font-size:13px;display:inline-block;margin:2px 4px}
+.cv-actions{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin:26px 0 8px}
+.cv-actions .btn-solid{background:var(--brass);color:var(--bg)}
+.cv-note{text-align:center;max-width:62ch;margin:10px auto 0}
+.uf-cta .btn-line.disabled{opacity:.45;pointer-events:none}@media (max-width:760px){.cv-pick{grid-template-columns:1fr}}
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 

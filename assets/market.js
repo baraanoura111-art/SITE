@@ -12,7 +12,7 @@ window.OASIS_MARKET = {
     "Lavita": "",
     "Marèva": "",
     "Marèva 2": "",
-    "Address Tierra": "",
+    "Address Tierra": "1925",
     "Palace Ostra": ""
   },
   build: {

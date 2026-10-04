@@ -1,6 +1,6 @@
 (function(){
   var WA = "971521325215";
-  var $ = function(id){ return document.getElementById(id); };
+  var $ = function(id){ return document.getElementById(id) || document.createElement("div"); };
   function num(v){ var n = parseFloat(String(v||"").replace(/[^0-9.]/g,"")); return isFinite(n) ? n : 0; }
   function aed(n){ return "AED " + Math.round(n).toLocaleString("en-US"); }
   function fmtInput(el){
@@ -14,7 +14,7 @@
   var lastMsg = "";
   function calc(){
     var price = num($("cPrice").value);
-    var offplan = document.querySelector('input[name="cType"]:checked').value === "offplan";
+    var offplan = (document.querySelector('input[name="cType"]:checked') || {}).value === "offplan";
     $("offplanBox").hidden = !offplan;
     if (!price){ $("cResult").hidden = true; $("cEmpty").hidden = false; return; }
     $("cResult").hidden = false; $("cEmpty").hidden = true;
@@ -118,7 +118,7 @@
     var o = document.createElement("option"); o.value = ""; o.textContent = "All clusters"; selC.appendChild(o);
     [["0,1,2,3","Palmiera (all phases)"],["6,7","Marèva (both phases)"]].forEach(function(g){ var x = document.createElement("option"); x.value = g[0]; x.textContent = g[1]; selC.appendChild(x); });
     D.c.forEach(function(n, i){ var x = document.createElement("option"); x.value = i; x.textContent = n; selC.appendChild(x); });
-    function inC(c, v){ return c === "" || c.split(",").indexOf(String(v)) > -1; }
+    function inC(c, v){ c = c == null ? "" : String(c); return c === "" || c.split(",").indexOf(String(v)) > -1; }
     function cName(c){ var o = selC.querySelector('option[value="' + c + '"]'); return o ? o.textContent : ""; }
     function fillStyles(){
       var c = selC.value, cur = selS.value, set = {};
@@ -183,6 +183,10 @@
         (sel.length ? "I'm interested in:\n" : "Can you check availability for these:\n") + list.join("\n");
       $("ufAsk").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg);
       $("ufAsk").classList.toggle("disabled", !r.length && !sel.length);
+      var ck = sel.slice(0, 3).map(function(u){ return u[0] + "-" + u[1]; });
+      $("ufCmp").textContent = sel.length >= 2 ? "Compare Selected (" + Math.min(sel.length, 3) + ")" : "Tick 2 or 3 to Compare";
+      $("ufCmp").classList.toggle("disabled", sel.length < 2);
+      $("ufCmp").setAttribute("data-u", ck.join(","));
     }
     selC.addEventListener("change", function(){ fillStyles(); render(true); });
     ["ufB","ufS","ufBs","ufF","ufSort"].forEach(function(id){ $(id).addEventListener("change", function(){ render(true); }); });
@@ -210,7 +214,7 @@
       bed = bed === ch.getAttribute("data-b") ? "" : ch.getAttribute("data-b");
       chips.forEach(function(x){ x.setAttribute("aria-pressed", x.getAttribute("data-b") === bed ? "true" : "false"); }); upd(); }); });
     $("qfC").addEventListener("change", upd); $("qfS").addEventListener("change", upd);
-    $("qfGo").addEventListener("click", function(){ window.ufApply(f()); location.hash = "finder"; });
+    $("qfGo").addEventListener("click", function(){ if (document.getElementById("finder")){ window.ufApply(f()); location.hash = "finder"; } else { try { sessionStorage.setItem("ufPending", JSON.stringify(f())); } catch(e){} location.href = "/tools/villa-finder/"; } });
     upd();
   })();
 
@@ -310,7 +314,7 @@ function OasisPDF(jsPDF, A, spec){
   // purchase fees
   pdfFlow("pdf", function(u){
     if ($("cResult").hidden){ $("pdfHint").textContent = "Enter a purchase price first."; return null; }
-    var offplan = document.querySelector('input[name="cType"]:checked').value === "offplan";
+    var offplan = (document.querySelector('input[name="cType"]:checked') || {}).value === "offplan";
     var secs = [{heading: "Fees", rows: []}], cur = secs[0];
     document.querySelectorAll("#cResult table.bd tbody").forEach(function(tb){
       if (tb.hidden) return;
@@ -565,7 +569,7 @@ function OasisPDF(jsPDF, A, spec){
       var cnt = window.ufCount({c: uf});
       pV.innerHTML = '<p class="cl-v-n"></p><p class="cl-v-t">Search every ' + name + ' villa by bedrooms, style, basement and plot, and pick the units you like.</p><button type="button" class="btn btn-solid">Open the Oasis Villa Finder</button>';
       pV.querySelector(".cl-v-n").textContent = cnt.toLocaleString("en-US") + " villas";
-      pV.querySelector("button").addEventListener("click", function(){ window.ufApply({c: uf}); location.hash = "finder"; });
+      pV.querySelector("button").addEventListener("click", function(){ if (document.getElementById("finder")){ window.ufApply({c: uf}); location.hash = "finder"; } else { try { sessionStorage.setItem("ufPending", JSON.stringify({c: uf})); } catch(e){} location.href = "/tools/villa-finder/"; } });
       var tabs = [["Overview", pOv], ["Villas", pV]];
       function show(k){ tabs.forEach(function(t, i){ t[2].setAttribute("aria-selected", i === k ? "true" : "false"); t[2].tabIndex = i === k ? 0 : -1; t[1].hidden = i !== k; }); }
       tabs.forEach(function(t, i){
@@ -597,6 +601,7 @@ function OasisPDF(jsPDF, A, spec){
       {n:"Palace Ostra", id:"ostra", v:"526 (branded)", b:"4–6", a:"7,269–12,959", p:"8,113–22,460", s:"Chamfered, Classical, Contemporary", pl:"80/20", h:"Q3 2029"}
     ];
     var ROWS = [["Villas","v"],["Bedrooms","b"],["BUA sq ft","a"],["Plot sq ft","p"],["AED / sq ft","psf"],["Styles","s"],["Payment plan","pl"],["Handover","h"],["Construction","cp"]];
+    if (!document.getElementById("cmpTbl")) return;
     var sel = [0, 1], pick = $("cmpPick"), tbl = $("cmpTbl");
     C.forEach(function(c, i){
       var btn = document.createElement("button"); btn.type = "button"; btn.className = "chip"; btn.textContent = c.n;
@@ -675,10 +680,103 @@ function OasisPDF(jsPDF, A, spec){
     mark();
   })();
 
+  // compare villas
+  (function(){
+    var host = document.getElementById("cvPick"), tbl = document.getElementById("cvTbl");
+    var D = window.OASIS_UNITS; if (!D) return;
+    // finder -> compare hand-off
+    document.addEventListener("click", function(e){
+      var a = e.target.closest && e.target.closest("#ufCmp"); if (!a) return;
+      e.preventDefault(); var u = a.getAttribute("data-u"); if (!u || u.split(",").length < 2) return;
+      location.href = "/tools/compare-villas/?u=" + encodeURIComponent(u);
+    });
+    if (!host || !tbl) return;
+    var PLAN = {0:["85/15","Q4 2026"],1:["85/15","Q4 2027"],2:["80/20","Q4 2028"],3:["80/20","Q1 2029"],4:["90/10","Q2 2028"],5:["80/20","Q4 2028"],6:["80/20","Q1 2030"],7:["80/20","Q1 2030"],8:["80/20","Q2 2029"],9:["80/20","Q3 2029"]};
+    var MK = ["Palmiera 1","Palmiera 2","Palmiera 3","Palmiera Collective","Mirage","Lavita","Marèva","Marèva 2","Address Tierra","Palace Ostra"];
+    var FPC = ["Palmiera 1","Palmiera 2","Palmiera 3","Palmiera Collective","Mirage","Lavita","Marèva","Marèva 2","Address Villas Tierra","Palace Villas Ostra"];
+    var byC = {}; D.u.forEach(function(u){ (byC[u[0]] = byC[u[0]] || []).push(u); });
+    function nat(a, b){ return (parseInt(a[1], 10) || 0) - (parseInt(b[1], 10) || 0) || String(a[1]).localeCompare(String(b[1])); }
+    Object.keys(byC).forEach(function(c){ byC[c].sort(nat); });
+    function find(c, n){ return (byC[c] || []).filter(function(u){ return String(u[1]) === String(n); })[0]; }
+    var picks = [null, null, null];
+    var q = new URLSearchParams(location.search).get("u");
+    if (q) q.split(",").slice(0, 3).forEach(function(k, i){ var p = k.split("-"); var u = find(p[0], p.slice(1).join("-")); if (u) picks[i] = u; });
+    function slot(i){
+      var d = document.createElement("div"); d.className = "cv-slot";
+      d.innerHTML = '<p class="cv-h">Villa ' + (i + 1) + '</p><label for="cvC' + i + '">Cluster</label><select id="cvC' + i + '"><option value="">Choose cluster</option></select><label for="cvU' + i + '">Unit</label><select id="cvU' + i + '"><option value="">Choose unit</option></select>';
+      var sc = d.querySelector("#cvC" + i), su = d.querySelector("#cvU" + i);
+      D.c.forEach(function(n, k){ var o = document.createElement("option"); o.value = k; o.textContent = n; sc.appendChild(o); });
+      function units(){ su.innerHTML = '<option value="">Choose unit</option>'; (byC[sc.value] || []).forEach(function(u){ var o = document.createElement("option"); o.value = u[1]; o.textContent = "Unit " + u[1] + " · " + u[2] + " BR " + D.s[u[4]]; su.appendChild(o); }); }
+      if (picks[i]){ sc.value = picks[i][0]; units(); su.value = picks[i][1]; }
+      sc.addEventListener("change", function(){ units(); picks[i] = null; draw(); });
+      su.addEventListener("change", function(){ picks[i] = su.value ? find(sc.value, su.value) : null; draw(); });
+      return d;
+    }
+    for (var i = 0; i < 3; i++) host.appendChild(slot(i));
+    function f(n){ return n ? Math.round(n).toLocaleString("en-US") : "–"; }
+    function plans(u){
+      var P = window.OASIS_FLOORPLANS || [], st = D.s[u[4]], c = FPC[u[0]];
+      var m = P.filter(function(p){ return p.c === c && p.b === u[2] && p.s.indexOf(st) === 0; });
+      if (u[3]){ var t = m.filter(function(p){ return p.s.indexOf(u[3]) > -1; }); if (t.length) m = t; }
+      if (u[6] === 1){ var bm = m.filter(function(p){ return p.s.indexOf("basement") > -1; }); if (bm.length) m = bm; }
+      else { var nb = m.filter(function(p){ return p.s.indexOf("basement") === -1; }); if (nb.length) m = nb; }
+      return m.map(function(p){ return '<a href="' + p.f + '" download>' + (m.length > 1 ? p.s.replace(st + " · ", "") : "Download") + '</a>'; }).join(" ") || "On request";
+    }
+    function draw(){
+      var sel = picks.filter(Boolean);
+      var M = window.OASIS_MARKET || {psf:{}, build:{}};
+      if (!sel.length){ tbl.innerHTML = '<tbody><tr><td class="note" style="text-align:center;padding:26px">Choose at least two villas to compare.</td></tr></tbody>'; }
+      else {
+        var rows = [
+          ["Cluster", function(u){ return D.c[u[0]]; }],
+          ["Bedrooms", function(u){ return u[2] + (u[3] ? " (" + u[3] + ")" : ""); }],
+          ["Style", function(u){ return D.s[u[4]]; }],
+          ["Floors", function(u){ return u[5] || "–"; }, "max"],
+          ["Basement", function(u){ return u[6] === 1 ? "Yes" : (u[6] === 0 ? "No" : "–"); }],
+          ["BUA sq ft", function(u){ return f(u[7]); }, "max", 7],
+          ["Plot sq ft", function(u){ return f(u[8]); }, "max", 8],
+          ["Plot to BUA", function(u){ return u[7] ? (u[8] / u[7]).toFixed(2) + "×" : "–"; }, "max", "r"],
+          ["View", function(u){ return u[9] || "–"; }],
+          ["Payment plan", function(u){ return PLAN[u[0]][0]; }],
+          ["Handover", function(u){ return PLAN[u[0]][1]; }],
+          ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
+          ["AED / sq ft", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
+          ["Floor plan", plans]
+        ];
+        var h = '<thead><tr><th scope="col"><span class="sr">Detail</span></th>' + sel.map(function(u){ return '<th scope="col">' + D.c[u[0]] + '<br><span style="font-size:14px;color:var(--muted)">Unit ' + u[1] + '</span></th>'; }).join("") + '</tr></thead><tbody>';
+        rows.forEach(function(r){
+          var best = null;
+          if (r[2] === "max" && sel.length > 1){
+            var vals = sel.map(function(u){ return r[3] === "r" ? (u[7] ? u[8] / u[7] : 0) : (r[3] ? u[r[3]] : u[5]); });
+            var mx = Math.max.apply(null, vals); if (vals.filter(function(v){ return v === mx; }).length < vals.length) best = mx;
+          }
+          h += '<tr><th scope="row">' + r[0] + '</th>' + sel.map(function(u){
+            var v = r[3] === "r" ? (u[7] ? u[8] / u[7] : 0) : (r[3] ? u[r[3]] : u[5]);
+            return '<td' + (best !== null && v === best ? ' class="cv-best"' : '') + '>' + r[1](u) + '</td>';
+          }).join("") + '</tr>';
+        });
+        tbl.innerHTML = h + '</tbody>';
+      }
+      var keys = sel.map(function(u){ return u[0] + "-" + u[1]; });
+      var url = location.origin + "/tools/compare-villas/" + (keys.length ? "?u=" + encodeURIComponent(keys.join(",")) : "");
+      if (history.replaceState) history.replaceState(null, "", keys.length ? "?u=" + encodeURIComponent(keys.join(",")) : location.pathname);
+      var list = sel.map(function(u){ return D.c[u[0]] + " unit " + u[1] + " (" + u[2] + " BR " + D.s[u[4]] + ")"; });
+      document.getElementById("cvAsk").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Hi Baraa, I'm comparing these villas in The Oasis:\n" + list.join("\n") + "\nAre they available, and what are the prices?\n" + url);
+      document.getElementById("cvAsk").classList.toggle("disabled", sel.length < 1);
+      document.getElementById("cvShare").onclick = function(){
+        var h2 = document.getElementById("cvHint");
+        if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ h2.textContent = "Link copied. Send it to anyone to see this comparison."; }, function(){ h2.textContent = url; });
+        else h2.textContent = url;
+      };
+    }
+    draw();
+  })();
+
   // page router: one topic per screen (articles and clusters also have their own URLs)
-  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "mortgage": "/tools/mortgage-calculator/", "factsheet": "/fact-sheet/", "construction": "/construction-update/", "privacy": "/privacy-policy/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/", "nextlaunch": "/articles/valoria-next-launch-in-the-oasis/"};
+  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "mortgage": "/tools/mortgage-calculator/", "factsheet": "/fact-sheet/", "construction": "/construction-update/", "privacy": "/privacy-policy/", "overview": "/overview/", "location": "/location/", "styles": "/style-and-floorplans/", "gallery": "/gallery/", "about": "/about/", "services": "/services/", "sell": "/sell-with-me/", "faq": "/faq/", "contact": "/contact/", "comparev": "/tools/compare-villas/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "floorplans": "/style-and-floorplans/", "explore": "/", "links": "/", "home": "/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/", "nextlaunch": "/articles/valoria-next-launch-in-the-oasis/"};
   var ROUTE = (document.querySelector('meta[name="oasis-route"]') || {}).content || "";
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
+  (function(){ var hh = decodeURIComponent(location.hash.replace("#","")); if (hh && PATHS[hh] && PATHS[hh] !== location.pathname && !document.getElementById(hh)) location.replace(PATHS[hh]); })();
   var PAGES = [
     {id:"home", title:"Home", s:["factsheet","explore","links","contact"]},
     {id:"overview", title:"Overview", s:["overview","location","factsheet"]},
@@ -689,8 +787,9 @@ function OasisPDF(jsPDF, A, spec){
     {id:"privacy", title:"Privacy Policy", s:["privacy"]},
     {id:"styles", title:"Style & Floorplan", s:["styles","floorplans"]},
     {id:"gallery", title:"Gallery", s:["gallery"]},
-    {id:"calculators", title:"Tools", s:["calculators"]},
+    {id:"calculators", title:"Buyer Tools", s:["calculators"]},
     {id:"finder", title:"Oasis Villa Finder", s:["finder"], parent:"calculators"},
+    {id:"comparev", title:"Compare Villas", s:["comparev"], parent:"calculators"},
     {id:"compare", title:"Compare Clusters", s:["compare"], parent:"calculators"},
     {id:"fees", title:"Purchase Fee Calculator", s:["fees"], parent:"calculators"},
     {id:"yield", title:"Rental Yield Estimator", s:["yield"], parent:"calculators"},
@@ -719,9 +818,10 @@ function OasisPDF(jsPDF, A, spec){
     {id:"about", title:"About", s:["about"]},
     {id:"services", title:"Services", s:["services"], parent:"about"},
     {id:"sell", title:"Sell With Me", s:["sell"], parent:"about"},
-    {id:"faq", title:"FAQ", s:["faq"], parent:"about"}
+    {id:"faq", title:"FAQ", s:["faq"], parent:"about"},
+    {id:"contact", title:"Contact", s:["contact"]}
   ];
-  var hero = document.querySelector("section.hero");
+  var hero = document.querySelector("section.hero") || document.createElement("section");
   var allSecs = document.querySelectorAll("main > section.block");
   function pageOf(sec){ for (var q = 0; q < PAGES.length; q++){ if (PAGES[q].id === sec) return q; } for (var i = 0; i < PAGES.length; i++) if (PAGES[i].s.indexOf(sec) > -1) return i; return 0; }
   function route(){
@@ -748,7 +848,7 @@ function OasisPDF(jsPDF, A, spec){
     document.querySelectorAll("#clusters .cl").forEach(function(a){ a.hidden = !(clDetail && a === target); });
     $("clGrid").hidden = clDetail;
     var gctl = $("clGrid").nextElementSibling; if (gctl && gctl.classList.contains("cc-ctl")) gctl.hidden = clDetail;
-    document.querySelector("#clusters .head").hidden = clDetail;
+    var clh = document.querySelector("#clusters .head"); if (clh) clh.hidden = clDetail;
     if (clDetail){
       $("crumb").textContent = target.getAttribute("data-name");
       document.querySelector("#pageTop .back").href = U("clusters");
@@ -797,7 +897,8 @@ function OasisPDF(jsPDF, A, spec){
 })();
 
   document.querySelectorAll(".lp-fp-select").forEach(function(sel){ var dl = sel.closest(".lp-fps").querySelector(".lp-fp-dl"); function upd(){ var o = sel.options[sel.selectedIndex]; dl.href = o.value; dl.setAttribute("download", o.getAttribute("data-dl")); } sel.addEventListener("change", upd); upd(); });
-  document.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".lp-find"); if (!b || !window.ufApply) return; window.ufApply({c: b.getAttribute("data-uf")}); location.hash = "finder"; });
+  document.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".lp-find"); if (!b || !window.ufApply) return; if (document.getElementById("finder")){ window.ufApply({c: b.getAttribute("data-uf")}); location.hash = "finder"; } else { try { sessionStorage.setItem("ufPending", JSON.stringify({c: b.getAttribute("data-uf")})); } catch(e){} location.href = "/tools/villa-finder/"; } });
+  try { var _pf = sessionStorage.getItem("ufPending"); if (_pf && document.getElementById("finder") && window.ufApply){ sessionStorage.removeItem("ufPending"); window.ufApply(JSON.parse(_pf)); } } catch(e){}
 
 /* Welcome card + newsletter signup.
    Signups go to the "Oasis Newsletter Subscribers" Google Sheet via its Apps Script web app.
@@ -868,10 +969,5 @@ function OasisPDF(jsPDF, A, spec){
     }
   });
   // show once, after the visitor has spent a while on the site (not on arrival)
-  if (!seen()){
-    var shownOnce = false, t0 = Date.now(), scrolled = 0;
-    function maybe(){ if (shownOnce || seen()) return; if (Date.now() - t0 > 40000 && scrolled > 1){ shownOnce = true; open(); } }
-    window.addEventListener("scroll", function(){ scrolled++; maybe(); }, {passive:true});
-    setInterval(maybe, 5000);
-  }
+
 })();
