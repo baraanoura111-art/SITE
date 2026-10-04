@@ -714,13 +714,15 @@ function OasisPDF(jsPDF, A, spec){
     }
     for (var i = 0; i < 3; i++) host.appendChild(slot(i));
     function f(n){ return n ? Math.round(n).toLocaleString("en-US") : "–"; }
+    var MAPF = ["cm_p1","cm_p2","cm_p3","cm_pc","cm_mirage","cm_lavita","cm_mareva","cm_mareva2","cm_tierra","cm_ostra"];
+    function cmap(u){ return '<a class="cv-btn" href="/images/maps/' + MAPF[u[0]] + '.jpg" target="_blank" rel="noopener">View Cluster Map</a>'; }
     function plans(u){
       var P = window.OASIS_FLOORPLANS || [], st = D.s[u[4]], c = FPC[u[0]];
       var m = P.filter(function(p){ return p.c === c && p.b === u[2] && p.s.indexOf(st) === 0; });
       if (u[3]){ var t = m.filter(function(p){ return p.s.indexOf(u[3]) > -1; }); if (t.length) m = t; }
       if (u[6] === 1){ var bm = m.filter(function(p){ return p.s.indexOf("basement") > -1; }); if (bm.length) m = bm; }
       else { var nb = m.filter(function(p){ return p.s.indexOf("basement") === -1; }); if (nb.length) m = nb; }
-      return m.map(function(p){ return '<a href="' + p.f + '" download>' + (m.length > 1 ? p.s.replace(st + " · ", "") : "Download") + '</a>'; }).join(" ") || "On request";
+      return m.map(function(p){ return '<a class="cv-btn" href="' + p.f + '" target="_blank" rel="noopener">View Floor Plan' + (m.length > 1 ? ' (' + p.s.replace(st + " · ", "") + ')' : '') + '</a>'; }).join("") || "On request";
     }
     function draw(){
       var sel = picks.filter(Boolean);
@@ -741,7 +743,8 @@ function OasisPDF(jsPDF, A, spec){
           ["Handover", function(u){ return PLAN[u[0]][1]; }],
           ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
           ["AED / sq ft", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
-          ["Floor plan", plans]
+          ["Floor plan", plans],
+          ["Cluster map", cmap]
         ];
         var h = '<thead><tr><th scope="col"><span class="sr">Detail</span></th>' + sel.map(function(u){ return '<th scope="col">' + D.c[u[0]] + '<br><span style="font-size:14px;color:var(--muted)">Unit ' + u[1] + '</span></th>'; }).join("") + '</tr></thead><tbody>';
         rows.forEach(function(r){
