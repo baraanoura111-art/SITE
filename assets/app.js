@@ -716,46 +716,44 @@ function OasisPDF(jsPDF, A, spec){
     function f(n){ return n ? Math.round(n).toLocaleString("en-US") : "–"; }
     var MAPF = ["cm_p1","cm_p2","cm_p3","cm_pc","cm_mirage","cm_lavita","cm_mareva","cm_mareva2","cm_tierra","cm_ostra"];
     function cmap(u){ return '<a class="cv-btn" href="/images/maps/' + MAPF[u[0]] + '.jpg" target="_blank" rel="noopener">View Cluster Map</a>'; }
-    function plans(u){
+    function planList(u){
       var P = window.OASIS_FLOORPLANS || [], st = D.s[u[4]], c = FPC[u[0]];
       var m = P.filter(function(p){ return p.c === c && p.b === u[2] && p.s.indexOf(st) === 0; });
       if (u[3]){ var t = m.filter(function(p){ return p.s.indexOf(u[3]) > -1; }); if (t.length) m = t; }
       if (u[6] === 1){ var bm = m.filter(function(p){ return p.s.indexOf("basement") > -1; }); if (bm.length) m = bm; }
       else { var nb = m.filter(function(p){ return p.s.indexOf("basement") === -1; }); if (nb.length) m = nb; }
-      return m.map(function(p){ return '<a class="cv-btn" href="' + p.f + '" target="_blank" rel="noopener">View Floor Plan' + (m.length > 1 ? ' (' + p.s.replace(st + " · ", "") + ')' : '') + '</a>'; }).join("") || "On request";
+      return m.map(function(p){ return {f: p.f, label: m.length > 1 ? p.s.replace(st + " · ", "") : ""}; });
+    }
+    function plans(u){
+      return planList(u).map(function(p){ return '<a class="cv-btn" href="' + p.f + '" target="_blank" rel="noopener">View Floor Plan' + (p.label ? ' (' + p.label + ')' : '') + '</a>'; }).join("") || "On request";
+    }
+    function getRows(){
+      var M = window.OASIS_MARKET || {psf:{}, build:{}};
+      return [
+        ["Cluster", function(u){ return D.c[u[0]]; }],
+        ["Bedrooms", function(u){ return u[2] + (u[3] ? " (" + u[3] + ")" : ""); }],
+        ["Style", function(u){ return D.s[u[4]]; }],
+        ["Floors", function(u){ return u[5] || "–"; }, "max"],
+        ["Basement", function(u){ return u[6] === 1 ? "Yes" : (u[6] === 0 ? "No" : "–"); }],
+        ["BUA sq ft", function(u){ return f(u[7]); }, "max", 7],
+        ["Plot sq ft", function(u){ return f(u[8]); }, "max", 8],
+        ["View", function(u){ return u[9] || "–"; }],
+        ["Payment plan", function(u){ return PLAN[u[0]][0]; }],
+        ["Handover", function(u){ return PLAN[u[0]][1]; }],
+        ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
+        ["AED / sq ft", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
+        ["Floor plan", plans, "", "", "plans"],
+        ["Cluster map", cmap, "", "", "map"]
+      ];
     }
     function draw(){
       var sel = picks.filter(Boolean);
-      var M = window.OASIS_MARKET || {psf:{}, build:{}};
       if (!sel.length){ tbl.innerHTML = '<tbody><tr><td class="note" style="text-align:center;padding:26px">Choose at least two villas to compare.</td></tr></tbody>'; }
       else {
-        var rows = [
-          ["Cluster", function(u){ return D.c[u[0]]; }],
-          ["Bedrooms", function(u){ return u[2] + (u[3] ? " (" + u[3] + ")" : ""); }],
-          ["Style", function(u){ return D.s[u[4]]; }],
-          ["Floors", function(u){ return u[5] || "–"; }, "max"],
-          ["Basement", function(u){ return u[6] === 1 ? "Yes" : (u[6] === 0 ? "No" : "–"); }],
-          ["BUA sq ft", function(u){ return f(u[7]); }, "max", 7],
-          ["Plot sq ft", function(u){ return f(u[8]); }, "max", 8],
-          ["Plot to BUA", function(u){ return u[7] ? (u[8] / u[7]).toFixed(2) + "×" : "–"; }, "max", "r"],
-          ["View", function(u){ return u[9] || "–"; }],
-          ["Payment plan", function(u){ return PLAN[u[0]][0]; }],
-          ["Handover", function(u){ return PLAN[u[0]][1]; }],
-          ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
-          ["AED / sq ft", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
-          ["Floor plan", plans],
-          ["Cluster map", cmap]
-        ];
         var h = '<thead><tr><th scope="col"><span class="sr">Detail</span></th>' + sel.map(function(u){ return '<th scope="col">' + D.c[u[0]] + '<br><span style="font-size:14px;color:var(--muted)">Unit ' + u[1] + '</span></th>'; }).join("") + '</tr></thead><tbody>';
-        rows.forEach(function(r){
-          var best = null;
-          if (r[2] === "max" && sel.length > 1){
-            var vals = sel.map(function(u){ return r[3] === "r" ? (u[7] ? u[8] / u[7] : 0) : (r[3] ? u[r[3]] : u[5]); });
-            var mx = Math.max.apply(null, vals); if (vals.filter(function(v){ return v === mx; }).length < vals.length) best = mx;
-          }
+        getRows().forEach(function(r){
           h += '<tr><th scope="row">' + r[0] + '</th>' + sel.map(function(u){
-            var v = r[3] === "r" ? (u[7] ? u[8] / u[7] : 0) : (r[3] ? u[r[3]] : u[5]);
-            return '<td' + (best !== null && v === best ? ' class="cv-best"' : '') + '>' + r[1](u) + '</td>';
+            return '<td>' + r[1](u) + '</td>';
           }).join("") + '</tr>';
         });
         tbl.innerHTML = h + '</tbody>';
@@ -773,6 +771,79 @@ function OasisPDF(jsPDF, A, spec){
       };
     }
     draw();
+
+    // download comparison as a PDF (landscape, same look as the other PDFs)
+    function cvPdf(sel){
+      var J = new window.jspdf.jsPDF({unit:"pt", format:"a4", orientation:"landscape"}), A = window.OASIS_PDF_ASSETS;
+      var W = 841.89, H = 595.28, M = 40;
+      J.addFileToVFS("Jost-Light.ttf", A.light); J.addFont("Jost-Light.ttf", "Jost", "light");
+      J.addFileToVFS("Jost-Regular.ttf", A.regular); J.addFont("Jost-Regular.ttf", "Jost", "normal");
+      J.addFileToVFS("Jost-Medium.ttf", A.medium); J.addFont("Jost-Medium.ttf", "Jost", "medium");
+      var BG = [13,12,11], INK = [239,231,219], MUTED = [184,174,159], LINE = [46,40,34], SAGE = [175,194,171], SAGE2 = [195,207,190], HI = [40,45,38];
+      function col(c){ J.setTextColor(c[0], c[1], c[2]); }
+      function fnt(w, z){ J.setFont("Jost", w); J.setFontSize(z); }
+      function spaced(t, x, y, sp, al){ J.setCharSpace(sp); J.text(t, x, y, {align: al || "left"}); J.setCharSpace(0); }
+      function fit(t, z, maxW, w){ fnt(w, z); while (z > 7 && J.getTextWidth(t) > maxW){ z -= 0.5; fnt(w, z); } return z; }
+      J.setFillColor(BG[0], BG[1], BG[2]); J.rect(0, 0, W, H, "F");
+      var lw = 112; J.addImage(A.logo, "PNG", M, 26, lw, lw * A.logoRatio);
+      fnt("light", 22); col(INK); J.text("Villa Comparison", W - M, 50, {align: "right"});
+      fnt("normal", 9); col(MUTED); spaced(("The Oasis by Emaar · " + today()).toUpperCase(), W - M, 68, 1.3, "right");
+      var y = 104, LW = 118, n = sel.length, CW = (W - 2 * M - LW) / n;
+      function cx(i){ return M + LW + CW * (i + 0.5); }
+      sel.forEach(function(u, i){
+        fit(D.c[u[0]], 15, CW - 16, "light"); col(INK); J.text(D.c[u[0]], cx(i), y + 18, {align: "center"});
+        fnt("normal", 9); col(MUTED); spaced("UNIT " + u[1], cx(i), y + 33, 1.2, "center");
+      });
+      y += 42; J.setDrawColor(SAGE[0], SAGE[1], SAGE[2]); J.setLineWidth(0.8); J.line(M, y, W - M, y);
+      getRows().forEach(function(r){
+        var kind = r[4] || "", lines = 1;
+        if (kind === "plans") lines = Math.max(1, Math.max.apply(null, sel.map(function(u){ return planList(u).length; })));
+        var rh = kind === "plans" ? 14 * lines + 9 : 21.5;
+        fnt("normal", 8.5); col(MUTED); spaced(r[0].toUpperCase(), M, y + 14, 0.8);
+        sel.forEach(function(u, i){
+          if (kind === "plans"){
+            var pl = planList(u);
+            if (!pl.length){ fnt("normal", 10.5); col(MUTED); J.text("On request", cx(i), y + 14, {align: "center"}); return; }
+            pl.forEach(function(p, k){
+              var t = "View floor plan" + (p.label ? " (" + p.label + ")" : ""), yy = y + 14 + k * 14;
+              fnt("normal", 10); col(SAGE2); var tw = J.getTextWidth(t), x = cx(i) - tw / 2;
+              J.textWithLink(t, x, yy, {url: location.origin + p.f});
+              J.setDrawColor(SAGE2[0], SAGE2[1], SAGE2[2]); J.setLineWidth(0.4); J.line(x, yy + 1.8, x + tw, yy + 1.8);
+            });
+          } else if (kind === "map"){
+            var t2 = "View cluster map"; fnt("normal", 10); col(SAGE2); var tw2 = J.getTextWidth(t2), x2 = cx(i) - tw2 / 2;
+            J.textWithLink(t2, x2, y + 14, {url: location.origin + "/images/maps/" + MAPF[u[0]] + ".jpg"});
+            J.setDrawColor(SAGE2[0], SAGE2[1], SAGE2[2]); J.setLineWidth(0.4); J.line(x2, y + 15.8, x2 + tw2, y + 15.8);
+          } else {
+            var v = String(r[1](u)); fit(v, 11, CW - 18, "normal"); col(INK); J.text(v, cx(i), y + 14, {align: "center"});
+          }
+        });
+        y += rh; J.setDrawColor(LINE[0], LINE[1], LINE[2]); J.setLineWidth(0.5); J.line(M, y, W - M, y);
+      });
+      var keys = sel.map(function(u){ return u[0] + "-" + u[1]; });
+      var online = location.origin + "/tools/compare-villas/?u=" + encodeURIComponent(keys.join(","));
+      y += 16; fnt("light", 8); col(MUTED);
+      J.text(J.splitTextToSize("Details come from the masterplan and do not show whether a villa is for sale. Availability and prices are confirmed on request.", W - 2 * M), M, y);
+      fnt("normal", 8.5); col(SAGE2); var ot = "Open this comparison online"; J.textWithLink(ot, W - M - J.getTextWidth(ot), y, {url: online});
+      var fy = H - 54;
+      J.setDrawColor(LINE[0], LINE[1], LINE[2]); J.setLineWidth(0.6); J.line(M, fy, W - M, fy);
+      fnt("normal", 10); col(INK); J.text("Baraa Noura  ·  The Oasis Specialist", W / 2, fy + 18, {align: "center"});
+      fnt("light", 9); col(MUTED); J.text("AX CAPITAL Real Estate  ·  BRN 70439", W / 2, fy + 31, {align: "center"});
+      col(SAGE2); J.text("+971 52 132 52 15   ·   b.noura@axcapital.ae   ·   @baraa.oasis", W / 2, fy + 44, {align: "center"});
+      return J;
+    }
+    document.getElementById("cvDl").addEventListener("click", function(){
+      var sel = picks.filter(Boolean), hint = document.getElementById("cvHint"), btn = this;
+      if (sel.length < 2){ hint.textContent = "Choose at least two villas to download a comparison."; return; }
+      btn.disabled = true; hint.textContent = "Preparing your PDF…";
+      pdfReady().then(function(){
+        cvPdf(sel).save("The Oasis - Villa comparison.pdf");
+        hint.textContent = "Downloaded. Check your downloads folder.";
+      }).catch(function(e){
+        if (window.console) console.error(e);
+        hint.textContent = "Sorry, the PDF couldn't be created on this device. Please try another browser, or message me and I'll send it.";
+      }).then(function(){ btn.disabled = false; });
+    });
   })();
 
   // page router: one topic per screen (articles and clusters also have their own URLs)
@@ -781,7 +852,7 @@ function OasisPDF(jsPDF, A, spec){
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
   (function(){ var hh = decodeURIComponent(location.hash.replace("#","")); if (hh && PATHS[hh] && PATHS[hh] !== location.pathname && !document.getElementById(hh)) location.replace(PATHS[hh]); })();
   var PAGES = [
-    {id:"home", title:"Home", s:["factsheet","explore","links","contact"]},
+    {id:"home", title:"Home", s:["homeMe","factsheet","explore","links","contact"]},
     {id:"overview", title:"Overview", s:["overview","location","factsheet"]},
     {id:"location", title:"Location", s:["location"], parent:"overview"},
     {id:"clusters", title:"Clusters", s:["clusters"]},
