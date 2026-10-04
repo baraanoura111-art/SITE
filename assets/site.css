@@ -1187,6 +1187,10 @@ main > section + section{border-top:1px solid var(--line)}
 .landing .lp > .lp-cp + h2,.landing .lp > .lp-facts + h2{margin-top:56px !important}
 .article h2.art-sub{border-top:1px solid var(--line);padding-top:48px}.article h1.art-sub{border-top:1px solid var(--line);padding-top:48px}
 .gv-fb{color:var(--muted);padding:24px;text-align:center}.gv-fb a{color:var(--brass);text-decoration:underline}
+/* The Specialist box now sits inside the hero, between the video and Find your villa */
+.hero .hm-box{margin:32px auto 0;text-align:center}
+.hm-box .hm-role{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 22px}
+.hm-box h2{margin-bottom:8px}
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 

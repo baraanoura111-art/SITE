@@ -852,7 +852,7 @@ function OasisPDF(jsPDF, A, spec){
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
   (function(){ var hh = decodeURIComponent(location.hash.replace("#","")); if (hh && PATHS[hh] && PATHS[hh] !== location.pathname && !document.getElementById(hh)) location.replace(PATHS[hh]); })();
   var PAGES = [
-    {id:"home", title:"Home", s:["homeMe","factsheet","explore","links","contact"]},
+    {id:"home", title:"Home", s:["factsheet","explore","links","contact"]},
     {id:"overview", title:"Overview", s:["overview","location","factsheet"]},
     {id:"location", title:"Location", s:["location"], parent:"overview"},
     {id:"clusters", title:"Clusters", s:["clusters"]},
