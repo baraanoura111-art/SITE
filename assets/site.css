@@ -1191,6 +1191,9 @@ main > section + section{border-top:1px solid var(--line)}
 .hero .hm-box{margin:32px auto 0;text-align:center}
 .hm-box .hm-role{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 22px}
 .hm-box h2{margin-bottom:8px}
+/* dividers inside the home hero */
+.h-div{max-width:860px;width:100%;margin:40px auto;border-top:1px solid var(--line);height:0}
+.hero .hm-box{margin:0 auto}@media (max-width:700px){.h-div{margin:32px auto}}
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 
