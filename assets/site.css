@@ -1194,6 +1194,16 @@ main > section + section{border-top:1px solid var(--line)}
 /* dividers inside the home hero */
 .h-div{max-width:860px;width:100%;margin:40px auto;border-top:1px solid var(--line);height:0}
 .hero .hm-box{margin:0 auto}@media (max-width:700px){.h-div{margin:32px auto}}
+/* sell with me: text box */
+.sell-box{max-width:760px;margin:0 auto 44px;border:1px solid var(--line);background:var(--surface);padding:38px 36px 34px}
+.sell-box p{color:var(--muted);font-size:17px;line-height:1.8;margin:0 0 18px}
+.sell-box .sb-lead{color:var(--ink);font-family:var(--display);font-weight:300;font-size:clamp(22px,2.6vw,27px);line-height:1.4;text-align:center;margin-bottom:24px}
+.sell-box .sb-cta{margin:26px 0 0;padding-top:24px;border-top:1px solid var(--line);color:var(--brass);text-align:center;font-size:18px;letter-spacing:.02em}@media (max-width:700px){.sell-box{padding:28px 20px 26px}.sell-box p{font-size:16.5px}}
+.hm-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hm-btns .btn-line{color:var(--ink)}
+.menu-foot{grid-template-columns:repeat(3,48px) !important;justify-content:center;gap:16px 22px !important;max-width:none !important}
+.menu-foot a.soc{width:48px !important;height:48px !important;min-height:0 !important;padding:0 !important;border-radius:50% !important;border:1px solid var(--line) !important;color:var(--ink) !important}
+.menu-foot a.soc svg{width:21px;height:21px}
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 

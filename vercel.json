@@ -15,6 +15,11 @@
       "source": "/articles/villa-styles-in-the-oasis/",
       "destination": "/articles/",
       "permanent": true
+    },
+    {
+      "source": "/fact-sheet/",
+      "destination": "/buyer-guide/",
+      "permanent": true
     }
   ],
   "headers": [
