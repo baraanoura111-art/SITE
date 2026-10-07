@@ -20,6 +20,11 @@
       "source": "/fact-sheet/",
       "destination": "/buyer-guide/",
       "permanent": true
+    },
+    {
+      "source": "/articles/valoria-next-launch-in-the-oasis/",
+      "destination": "/next-launch-valoria/",
+      "permanent": true
     }
   ],
   "headers": [

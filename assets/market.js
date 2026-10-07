@@ -4,16 +4,16 @@
    Leave a value empty ("") and the site shows "–" or "Construction update coming soon". */
 window.OASIS_MARKET = {
   psf: {
-    "Palmiera 1": "",
-    "Palmiera 2": "",
-    "Palmiera 3": "",
-    "Palmiera Collective": "",
-    "Mirage": "",
-    "Lavita": "",
+    "Palmiera 1": "1568",
+    "Palmiera 2": "1715",
+    "Palmiera 3": "1644",
+    "Palmiera Collective": "2147",
+    "Mirage": "1726",
+    "Lavita": "2101",
     "Marèva": "",
     "Marèva 2": "",
-    "Address Tierra": "1925",
-    "Palace Ostra": ""
+    "Address Tierra": "1919",
+    "Palace Ostra": "2015"
   },
   build: {
     "Palmiera 1": {pct: 81.72, date: "October 1st, 2026"},

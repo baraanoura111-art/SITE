@@ -582,7 +582,7 @@ section.block .head h2::before,.contact h2::before{margin-left:auto;margin-right
 .uf-sort{display:flex;align-items:center;gap:12px}
 .uf-sort label{margin:0}
 .uf-sort select{width:auto;min-width:170px}
-.uf-tbl{max-height:560px;overflow:auto;border-top:1px solid var(--line)}
+.uf-tbl{max-height:330px;overflow:auto;border-top:1px solid var(--line)}
 .uf-tbl thead th{position:sticky;top:0;background:var(--bg);z-index:1}
 .uf-tbl td,.uf-tbl th{text-align:left}
 .uf-tbl td:first-child,.uf-tbl th:first-child{width:36px;padding-left:4px}
@@ -1208,6 +1208,45 @@ main > section + section{border-top:1px solid var(--line)}
 .sell-box{max-width:620px !important;margin:0 auto 30px !important;padding:22px 24px 20px !important}
 .sell-box p{font-size:15px !important;line-height:1.65 !important;margin:0 0 12px !important}
 .sell-box .sb-cta{margin:16px 0 0 !important;padding-top:14px !important;font-size:15px !important;letter-spacing:.12em;text-transform:uppercase}@media (max-width:700px){.sell-box{padding:18px 16px 16px !important}.sell-box p{font-size:14.5px !important}}
+.st-cta{display:flex;justify-content:center;margin:36px 0 4px}.st-cta .btn-solid{background:var(--brass);color:var(--bg)}
+.am-btns{grid-column:1/-1;display:flex;flex-wrap:nowrap;gap:10px;justify-content:center;margin-top:36px}
+.am-btns .btn{flex:0 1 170px;min-width:0;padding:0 12px;justify-content:center;white-space:nowrap}@media (max-width:520px){.am-btns{gap:8px}.am-btns .btn{flex:1 1 0;font-size:13px;padding:0 6px;letter-spacing:.03em}}
+/* home about box: compact, same width as the video and Find Your Villa boxes */
+.hero .hm-box{max-width:860px !important;width:100%;flex-direction:row !important;align-items:center !important;text-align:left !important;padding:24px 30px !important;gap:30px !important;margin:0 auto}
+.hero .hm-box img{width:120px;height:120px;margin:0;flex:none}
+.hero .hm-box .hm-t{flex:1;min-width:0}
+.hero .hm-box h2{text-align:left;font-size:26px;margin:0 0 4px}
+.hero .hm-box .hm-role{margin:0 0 12px;font-size:11px}
+.hero .hm-box p{font-size:15px;line-height:1.6;max-width:none;margin:0 0 8px}
+.hero .hm-box .hm-btns{justify-content:flex-start;margin-top:14px}
+.hero .hm-box .hm-btns .btn{min-height:42px;padding:0 20px}@media (max-width:700px){.hero .hm-box{flex-direction:column !important;text-align:center !important;padding:22px 18px !important;gap:14px !important}.hero .hm-box img{width:88px;height:88px}.hero .hm-box h2{text-align:center;font-size:23px}.hero .hm-box p{font-size:14.5px}.hero .hm-box .hm-btns{justify-content:center}}
+/* full-width dividers in the home hero */
+section.hero{overflow-x:hidden;overflow-x:clip}
+.h-div{width:100%;height:1px;background:var(--line);box-shadow:0 0 0 100vmax var(--line);clip-path:inset(0 -100vmax);border:0;margin:40px 0;align-self:stretch}@media (max-width:700px){.h-div{margin:30px 0}}
+/* smaller home logo and lede, proportional */
+.logo-mark svg{width:min(300px,68vw) !important}
+.hero .lede{font-size:14.5px !important;line-height:1.55 !important;margin-top:14px !important}
+.hero-ctas{gap:12px !important;margin-top:22px !important}
+.hero-ctas .btn{flex:0 0 250px !important;width:250px;justify-content:center;min-height:48px}@media (max-width:600px){.hero-ctas .btn{flex:1 1 100% !important;width:100%;max-width:340px}}
+#overview .lede-p,.hero .lede,#location .lede-p{text-wrap:balance}
+#overview .lede-p{max-width:none}
+.faq-more{text-align:center;margin-top:44px}.faq-more p{color:var(--ink);font-size:18px;margin:0 0 18px}.faq-more .btn-solid{background:var(--brass);color:var(--bg)}
+.find-socials{max-width:760px;margin:44px auto 0;text-align:center}.find-socials h3{font-size:clamp(22px,2.6vw,28px);margin:0 0 18px}.find-socials .about-links{justify-content:center}
+.article .art-meta{font-size:11px !important;letter-spacing:.05em !important;margin-bottom:30px !important}@media (max-width:640px){.article .art-meta{font-size:10.5px !important}}
+/* Next Launch: Valoria page */
+#nextlaunch .head{text-align:center}
+#nextlaunch .cp{margin:0 auto 10px;align-items:center;text-align:center;max-width:560px}
+#nextlaunch .cp-row{grid-template-columns:1fr;justify-items:center;gap:10px;font-size:15px}
+#nextlaunch .cp-bar{width:min(440px,86vw);height:8px}
+.nl-know{max-width:700px;margin:34px auto 0;text-align:center}
+.nl-know h3{font-size:clamp(22px,2.6vw,28px);margin:0 0 16px}
+.nl-list{list-style:none;padding:0;margin:0 auto 18px;display:grid;gap:8px;color:var(--muted);font-size:17px}
+.nl-list strong{color:var(--ink);font-weight:500}
+.nl-know p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 auto 18px;max-width:58ch}
+#nextlaunch .soon{margin-top:40px}
+.cc-soon{display:flex !important;align-items:center;justify-content:center;background:linear-gradient(135deg,#1b1916,#0d0c0b);color:var(--brass);font-size:12px;letter-spacing:.32em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
+
 .lp-media{max-width:720px;margin:0 auto 30px !important}
 .lp-fps{border:1px solid var(--line);background:var(--surface);padding:30px 24px;max-width:720px;margin:0 auto}
 
