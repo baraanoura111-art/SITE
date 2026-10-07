@@ -150,7 +150,7 @@
       body.innerHTML = "";
       r.slice(0, shown).forEach(function(u){
         var tr = document.createElement("tr"), k = key(u);
-        var cells = ['', u[1], D.c[u[0]], u[2] + (u[3] ? " (" + u[3] + ")" : ""), D.s[u[4]], u[5] || "–", u[6] === 1 ? "Yes" : u[6] === 0 ? "No" : "–", f(u[7]), f(u[8]), u[9] || "–"];
+        var cells = ['', D.c[u[0]], u[1], u[2] + (u[3] ? " (" + u[3] + ")" : ""), D.s[u[4]], u[5] || "–", u[6] === 1 ? "Yes" : u[6] === 0 ? "No" : "–", u[9] || "–", f(u[7]), f(u[8])];
         cells.forEach(function(t, i){
           var td = document.createElement("td");
           if (i === 0){ var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!picked[k];
