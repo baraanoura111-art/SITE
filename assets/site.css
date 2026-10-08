@@ -1307,6 +1307,10 @@ h1,h2,h3,.qf-h,.nl-t,.lt-name,.pb-title,.about-h,.hm-t h2,.find-socials h3,.fs h
 #explore p{text-wrap:balance}
 .dl-s img{object-fit:contain !important;background:#000 !important}
 .sell-box p{color:var(--ink);opacity:.92}
+.hm-box{flex-wrap:wrap !important}
+.hm-box .hm-btns{flex:0 0 100%;width:100%;justify-content:center !important;margin-top:22px}
+.hero .hm-box{flex-wrap:wrap !important}
+.hero .hm-box .hm-btns{flex:0 0 100%;justify-content:center !important;margin-top:6px !important}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}
