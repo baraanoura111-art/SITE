@@ -683,7 +683,7 @@ function OasisPDF(jsPDF, A, spec){
 
   // deals carousel
   (function(){
-    var tr = $("dlTrack"); if (!tr) return;
+    var tr = $("dlTrack"); if (!tr || !tr.parentNode) return;
     var sl = tr.querySelectorAll(".dl-s"), dots = $("dlDots"), cur = 0;
     sl.forEach(function(_, k){ var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Deal " + (k + 1)); b.addEventListener("click", function(){ go(k); }); dots.appendChild(b); });
     function go(k){ k = (k + sl.length) % sl.length; tr.scrollTo({left: k * tr.clientWidth, behavior: "smooth"}); }
@@ -692,6 +692,7 @@ function OasisPDF(jsPDF, A, spec){
     $("dlPrev").addEventListener("click", function(){ go(cur - 1); });
     $("dlNext").addEventListener("click", function(){ go(cur + 1); });
     mark();
+    if (sl.length < 2){ var c = tr.parentNode.querySelector(".tm-ctl"); if (c) c.hidden = true; }
   })();
 
   // compare villas
