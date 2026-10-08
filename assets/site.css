@@ -1245,6 +1245,21 @@ section.hero{overflow-x:hidden;overflow-x:clip}
 .nl-know p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 auto 18px;max-width:58ch}
 #nextlaunch .soon{margin-top:40px}
 .cc-soon{display:flex !important;align-items:center;justify-content:center;background:linear-gradient(135deg,#1b1916,#0d0c0b);color:var(--brass);font-size:12px;letter-spacing:.32em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.dl{margin-top:48px}.dl-s{flex:0 0 100%;scroll-snap-align:center;margin:0;box-sizing:border-box}.dl-s img{display:block;width:100%;height:auto;border:1px solid var(--line)}
+.uf-note{text-align:center;margin:-8px auto 22px}
+.about .text p,.text p{text-wrap:balance}
+footer .wrap{gap:6px !important}
+footer .f-id{gap:6px !important;line-height:1.4}
+footer .f-id span,footer .f-priv-link{line-height:1.4;display:block}
+.f-quick{margin-bottom:0 !important;gap:0 34px;row-gap:6px}
+.f-quick a{padding:2px !important}
+.f-qt{line-height:1.4}
+.f-priv-link{margin-top:0 !important;padding:0 !important}
+footer .social{margin:4px 0}
+.cv-tbl{table-layout:fixed;width:100%}
+.cv-tbl thead th:first-child{width:130px}
+.cv-tbl th[scope=row],.cv-tbl td{height:46px;vertical-align:middle;border-bottom:1px solid var(--line)}
+.cv-tbl thead th{vertical-align:middle}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}

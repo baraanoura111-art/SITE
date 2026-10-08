@@ -150,7 +150,7 @@
       body.innerHTML = "";
       r.slice(0, shown).forEach(function(u){
         var tr = document.createElement("tr"), k = key(u);
-        var cells = ['', D.c[u[0]], u[1], u[2] + (u[3] ? " (" + u[3] + ")" : ""), D.s[u[4]], u[5] || "–", u[6] === 1 ? "Yes" : u[6] === 0 ? "No" : "–", u[9] || "–", f(u[7]), f(u[8])];
+        var cells = ['', D.c[u[0]], u[1], u[2] + (u[3] ? " (" + u[3] + ")" : ""), D.s[u[4]], u[5] || "–", u[6] === 1 ? "Yes" : u[6] === 0 ? "No" : "–", u[9] || "–", u[11] || "–", f(u[7]), f(u[8])];
         cells.forEach(function(t, i){
           var td = document.createElement("td");
           if (i === 0){ var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!picked[k];
@@ -681,6 +681,19 @@ function OasisPDF(jsPDF, A, spec){
     mark();
   })();
 
+  // deals carousel
+  (function(){
+    var tr = $("dlTrack"); if (!tr) return;
+    var sl = tr.querySelectorAll(".dl-s"), dots = $("dlDots"), cur = 0;
+    sl.forEach(function(_, k){ var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Deal " + (k + 1)); b.addEventListener("click", function(){ go(k); }); dots.appendChild(b); });
+    function go(k){ k = (k + sl.length) % sl.length; tr.scrollTo({left: k * tr.clientWidth, behavior: "smooth"}); }
+    function mark(){ cur = Math.round(tr.scrollLeft / tr.clientWidth); dots.querySelectorAll("button").forEach(function(b, k){ b.setAttribute("aria-current", k === cur ? "true" : "false"); }); }
+    tr.addEventListener("scroll", function(){ clearTimeout(tr._t); tr._t = setTimeout(mark, 60); }, {passive:true});
+    $("dlPrev").addEventListener("click", function(){ go(cur - 1); });
+    $("dlNext").addEventListener("click", function(){ go(cur + 1); });
+    mark();
+  })();
+
   // compare villas
   (function(){
     var host = document.getElementById("cvPick"), tbl = document.getElementById("cvTbl");
@@ -742,6 +755,7 @@ function OasisPDF(jsPDF, A, spec){
         ["BUA sq ft", function(u){ return f(u[7]); }, "max", 7],
         ["Plot sq ft", function(u){ return f(u[8]); }, "max", 8],
         ["View", function(u){ return u[9] || "–"; }],
+        ["Position", function(u){ return u[11] || "–"; }],
         ["Payment plan", function(u){ return PLAN[u[0]][0]; }],
         ["Handover", function(u){ return PLAN[u[0]][1]; }],
         ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
