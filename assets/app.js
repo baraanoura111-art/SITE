@@ -277,7 +277,7 @@ function OasisPDF(jsPDF, A, spec){
   J.setDrawColor(LINE[0],LINE[1],LINE[2]); J.setLineWidth(0.6); J.line(M, fy, W-M, fy);
   f("normal", 10); col(INK); J.text("Baraa Noura  ·  The Oasis Specialist", W/2, fy + 22, {align:"center"});
   f("light", 9); col(MUTED); J.text("AX CAPITAL Real Estate  ·  BRN 70439", W/2, fy + 36, {align:"center"});
-  col(SAGE2); J.text("+971 52 132 52 15   ·   b.noura@axcapital.ae   ·   @baraa.oasis", W/2, fy + 50, {align:"center"});
+  col(SAGE2); J.text("+971 52 132 52 15   ·   oasis@baraanoura.com   ·   @baraa.oasis", W/2, fy + 50, {align:"center"});
   return J;
 }
 
@@ -848,7 +848,7 @@ function OasisPDF(jsPDF, A, spec){
       J.setDrawColor(LINE[0], LINE[1], LINE[2]); J.setLineWidth(0.6); J.line(M, fy, W - M, fy);
       fnt("normal", 10); col(INK); J.text("Baraa Noura  ·  The Oasis Specialist", W / 2, fy + 18, {align: "center"});
       fnt("light", 9); col(MUTED); J.text("AX CAPITAL Real Estate  ·  BRN 70439", W / 2, fy + 31, {align: "center"});
-      col(SAGE2); J.text("+971 52 132 52 15   ·   b.noura@axcapital.ae   ·   @baraa.oasis", W / 2, fy + 44, {align: "center"});
+      col(SAGE2); J.text("+971 52 132 52 15   ·   oasis@baraanoura.com   ·   @baraa.oasis", W / 2, fy + 44, {align: "center"});
       return J;
     }
     document.getElementById("cvDl").addEventListener("click", function(){
@@ -1033,7 +1033,7 @@ function OasisPDF(jsPDF, A, spec){
       fetch(NEWSLETTER_ENDPOINT, {method:"POST", body:b, mode:"no-cors", keepalive:true}).catch(function(){});
       done("You're subscribed. Thank you.");
     } else {
-      location.href = "mailto:b.noura@axcapital.ae?subject=" + encodeURIComponent("Newsletter signup") + "&body=" + encodeURIComponent("Please add me to The Oasis newsletter.\nEmail: " + v);
+      location.href = "mailto:oasis@baraanoura.com?subject=" + encodeURIComponent("Newsletter signup") + "&body=" + encodeURIComponent("Please add me to The Oasis newsletter.\nEmail: " + v);
       done("Opening your email app. Send the message to confirm.");
     }
   }
@@ -1057,7 +1057,7 @@ function OasisPDF(jsPDF, A, spec){
       hint.textContent = "You're subscribed. Thank you.";
       setTimeout(close, 1600);
     } else {
-      location.href = "mailto:b.noura@axcapital.ae?subject=" + encodeURIComponent("Newsletter signup") +
+      location.href = "mailto:oasis@baraanoura.com?subject=" + encodeURIComponent("Newsletter signup") +
         "&body=" + encodeURIComponent("Please add me to The Oasis newsletter.\nEmail: " + v);
       hint.textContent = "Opening your email app. Send the message to confirm.";
     }
