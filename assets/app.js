@@ -138,15 +138,15 @@
       if (num($("ufP").value)) c.push("Minimum plot: " + f(num($("ufP").value)) + " sq ft");
       if ($("ufPos").value) c.push("Position: " + $("ufPos").value);
       if ($("ufV").value) c.push("View: " + $("ufV").value);
-      if ($("ufVastu").checked) c.push("Vastu-compliant: required");
+      var dr = [].slice.call(document.querySelectorAll('input[name="ufDir"]:checked')).map(function(x){ return x.value; });
+      if (dr.length) c.push("Compass: " + dr.join(", "));
       return c;
     }
     function sendInq(){
       var u = need("ufName","ufPhone","ufHint"); if (!u) return;
       var c = crit();
       saveLead("Villa Finder inquiry", u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
-      wa("Hi Baraa, I used the Oasis Villa Finder on your site.\nName: " + u.name + "\nPhone: " + u.phone + "\n" + (c.length ? "I'm looking for:\n" + c.join("\n") : "Please send me what's available for sale.") + "\nPlease send me the available units for sale matching this.");
-      $("ufHint").textContent = "Opening WhatsApp. Send the message and I'll reply with the matching units.";
+      wa("Hi Baraa, I used the Oasis Villa Finder on your site.\n\nName: " + u.name + "\nPhone: " + u.phone + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
     }
     $("ufSend").addEventListener("click", sendInq);
     $("ufP").addEventListener("blur", function(){ fmtInput(this); });
@@ -156,7 +156,7 @@
     window.ufApply = function(f){
       selC.value = f.c || ""; fillStyles();
       $("ufB").value = f.b || ""; selS.value = f.s || ""; $("ufBs").value = ""; $("ufF").value = ""; $("ufP").value = "";
-      $("ufPos").value = ""; $("ufV").value = ""; $("ufVastu").checked = false;
+      $("ufPos").value = ""; $("ufV").value = ""; [].forEach.call(document.querySelectorAll('input[name="ufDir"]'), function(x){ x.checked = false; });
     };
     window.ufCount = function(f){
       return U.filter(function(u){ return inC(f.c || "", u[0]) && (!f.b || u[2] == f.b) && (!f.s || u[4] == f.s); }).length;

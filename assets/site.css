@@ -1311,7 +1311,8 @@ h1,h2,h3,.qf-h,.nl-t,.lt-name,.pb-title,.about-h,.hm-t h2,.find-socials h3,.fs h
 .hm-box .hm-btns{flex:0 0 100%;width:100%;justify-content:center !important;margin-top:22px}
 .hero .hm-box{flex-wrap:wrap !important}
 .hero .hm-box .hm-btns{flex:0 0 100%;justify-content:center !important;margin-top:6px !important}
-.uf-vst{display:flex;align-items:end}.uf-chk{display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;min-height:44px;color:var(--ink)}.uf .uf-chk input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;min-height:0;padding:0;border:0;background:none;accent-color:var(--brass);cursor:pointer}.uf-contact{margin-top:22px}.uf-cta{margin:24px 0 8px}
+.uf-cmp{grid-column:1/-1;border:0;margin:6px 0 0;padding:0;min-width:0}.uf-cmp legend{padding:0;margin-bottom:8px;font-size:13px;letter-spacing:.1em;color:var(--muted)}.uf-dirs{display:flex;flex-wrap:wrap;gap:8px 22px}.uf-chk{display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;min-height:44px;color:var(--ink)}.uf .uf-chk input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;min-height:0;padding:0;border:0;background:none;accent-color:var(--brass);cursor:pointer}.uf-contact{margin-top:22px}.uf-cta{margin:24px 0 8px}
+.uf-contact{max-width:440px;margin-left:auto;margin-right:auto;gap:14px}.uf-contact input{font-size:15px;padding-top:6px;padding-bottom:6px}.uf-contact label{font-size:12px}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}
