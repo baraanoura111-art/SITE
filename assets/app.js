@@ -112,9 +112,9 @@
 
 
   // unit finder: filters -> inquiry (no public table)
-  (function(){
+  function initFinder(P, SRC, MSG, expose){
     var D = window.OASIS_UNITS, U = D.u;
-    var selC = $("ufC"), selS = $("ufS");
+    var selC = $(P+"C"), selS = $(P+"S");
     var o = document.createElement("option"); o.value = ""; o.textContent = "All clusters"; selC.appendChild(o);
     [["0,1,2,3","Palmiera (all phases)"],["6,7","Marèva (both phases)"]].forEach(function(g){ var x = document.createElement("option"); x.value = g[0]; x.textContent = g[1]; selC.appendChild(x); });
     D.c.forEach(function(n, i){ var x = document.createElement("option"); x.value = i; x.textContent = n; selC.appendChild(x); });
@@ -131,57 +131,45 @@
     function crit(){
       var c = [];
       if (selC.value !== "") c.push("Cluster: " + cName(selC.value));
-      if ($("ufB").value) c.push("Bedrooms: " + $("ufB").value);
+      if ($(P+"B").value) c.push("Bedrooms: " + $(P+"B").value);
       if (selS.value !== "") c.push("Style: " + D.s[selS.value]);
-      if ($("ufBs").value !== "") c.push("Basement: " + ($("ufBs").value === "1" ? "with" : "without"));
-      if ($("ufF").value) c.push("Floors: " + $("ufF").value);
-      if (num($("ufP").value)) c.push("Minimum plot: " + f(num($("ufP").value)) + " sq ft");
-      if ($("ufPos").value) c.push("Position: " + $("ufPos").value);
-      if ($("ufV").value) c.push("View: " + $("ufV").value);
-      var dr = [].slice.call(document.querySelectorAll('input[name="ufDir"]:checked')).map(function(x){ return x.value; });
+      if ($(P+"Bs").value !== "") c.push("Basement: " + ($(P+"Bs").value === "1" ? "with" : "without"));
+      if ($(P+"F").value) c.push("Floors: " + $(P+"F").value);
+      if (num($(P+"P").value)) c.push("Minimum plot: " + f(num($(P+"P").value)) + " sq ft");
+      if ($(P+"Pos").value) c.push("Position: " + $(P+"Pos").value);
+      if ($(P+"V").value) c.push("View: " + $(P+"V").value);
+      var dr = [].slice.call(document.querySelectorAll('input[name="'+P+'Dir"]:checked')).map(function(x){ return x.value; });
       if (dr.length) c.push("Compass: " + dr.join(", "));
       return c;
     }
+    var dirUpd;
     function sendInq(){
-      var u = need("ufName","ufPhone","ufHint"); if (!u) return;
+      var u = need(P+"Name",P+"Phone",P+"Hint"); if (!u) return;
       var c = crit();
-      saveLead("Villa Finder inquiry", u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
-      wa("Hi Baraa, I used the Oasis Villa Finder on your site.\n\nName: " + u.name + "\nPhone: " + u.phone + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
+      saveLead(SRC, u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
+      wa(MSG + "\n\nName: " + u.name + "\nPhone: " + u.phone + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
     }
-    (function(){ var dd = $("ufDd"), sm = $("ufDdS");
-      function upd(){ var v = [].map.call(document.querySelectorAll('input[name="ufDir"]:checked'), function(x){ return x.value; }); sm.textContent = v.length ? v.join(", ") : "Any"; }
-      document.addEventListener("change", function(e){ if (e.target && e.target.name === "ufDir") upd(); });
+    (function(){ var dd = $(P+"Dd"), sm = $(P+"DdS");
+      function upd(){ var v = [].map.call(document.querySelectorAll('input[name="'+P+'Dir"]:checked'), function(x){ return x.value; }); sm.textContent = v.length ? v.join(", ") : "Any"; }
+      document.addEventListener("change", function(e){ if (e.target && e.target.name === P + "Dir") upd(); });
       document.addEventListener("click", function(e){ if (dd && dd.open && dd.parentNode && !dd.contains(e.target)) dd.open = false; });
-      window.ufDirUpd = upd; })();
-    $("ufSend").addEventListener("click", sendInq);
-    $("ufP").addEventListener("blur", function(){ fmtInput(this); });
+      dirUpd = upd; })();
+    $(P+"Send").addEventListener("click", sendInq);
+    $(P+"P").addEventListener("blur", function(){ fmtInput(this); });
     selC.addEventListener("change", fillStyles);
     fillStyles();
     // public helpers for quick search and cluster pages
-    window.ufApply = function(f){
+    if (expose) window.ufApply = function(f){
       selC.value = f.c || ""; fillStyles();
-      $("ufB").value = f.b || ""; selS.value = f.s || ""; $("ufBs").value = ""; $("ufF").value = ""; $("ufP").value = "";
-      $("ufPos").value = ""; $("ufV").value = ""; [].forEach.call(document.querySelectorAll('input[name="ufDir"]'), function(x){ x.checked = false; }); if (window.ufDirUpd) window.ufDirUpd();
+      $(P+"B").value = f.b || ""; selS.value = f.s || ""; $(P+"Bs").value = ""; $(P+"F").value = ""; $(P+"P").value = "";
+      $(P+"Pos").value = ""; $(P+"V").value = ""; [].forEach.call(document.querySelectorAll('input[name="'+P+'Dir"]'), function(x){ x.checked = false; }); if (dirUpd) dirUpd();
     };
-    window.ufCount = function(f){
+    if (expose) window.ufCount = function(f){
       return U.filter(function(u){ return inC(f.c || "", u[0]) && (!f.b || u[2] == f.b) && (!f.s || u[4] == f.s); }).length;
     };
-  })();
-
-  // quick "Find your villa" (home)
-  (function(){
-    var bed = "", chips = document.querySelectorAll("#qf .qf-chip");
-    function f(){ return {b: bed, c: $("qfC").value, s: $("qfS").value}; }
-    function upd(){ var n = window.ufCount(f()); $("qfCount").textContent = n ? n.toLocaleString("en-US") + (n === 1 ? " villa matches" : " villas match") : "No villas match. Try another combination."; $("qfGo").disabled = !n; }
-    chips.forEach(function(ch){ ch.addEventListener("click", function(){
-      bed = bed === ch.getAttribute("data-b") ? "" : ch.getAttribute("data-b");
-      chips.forEach(function(x){ x.setAttribute("aria-pressed", x.getAttribute("data-b") === bed ? "true" : "false"); }); upd(); }); });
-    $("qfC").addEventListener("change", upd); $("qfS").addEventListener("change", upd);
-    $("qfGo").addEventListener("click", function(){ if (document.getElementById("finder")){ window.ufApply(f()); location.hash = "finder"; } else { try { sessionStorage.setItem("ufPending", JSON.stringify(f())); } catch(e){} location.href = "/tools/villa-finder/"; } });
-    upd();
-  })();
-
-
+  }
+  initFinder("uf", "Villa Finder inquiry", "Hi Baraa, I used the Oasis Villa Finder on your site.", true);
+  initFinder("qf", "Home Find Your Villa", "Hi Baraa, I used Find Your Villa on your website.", false);
 
   // ===== PDF reports (dark theme, Jost, logo) =====
 // Shared PDF builder for The Oasis Specialist (browser + node)

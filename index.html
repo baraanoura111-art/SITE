@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Poppins:wght@200;300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=440f1c19">
+<link rel="stylesheet" href="/assets/site.css?v=9bfdba69">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7T2ZSYNG70"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
@@ -105,15 +105,27 @@ if(n)gtag('event',n,{link_url:h.slice(0,150),page_path:location.pathname})}catch
         <div class="h-div" aria-hidden="true"></div>
         <div class="qf" id="qf">
           <p class="qf-h">Find Your Villa</p>
-          <div class="qf-row" role="group" aria-label="Bedrooms">
-            <button type="button" class="qf-chip" data-b="4" aria-pressed="false">4 BR</button><button type="button" class="qf-chip" data-b="5" aria-pressed="false">5 BR</button><button type="button" class="qf-chip" data-b="6" aria-pressed="false">6 BR</button><button type="button" class="qf-chip" data-b="7" aria-pressed="false">7 BR</button>
-          </div>
-          <div class="qf-sel lf">
-            <div><label for="qfC">Cluster</label><select id="qfC"><option value="">All clusters</option><option value="0">Palmiera 1</option><option value="1">Palmiera 2</option><option value="2">Palmiera 3</option><option value="3">Palmiera Collective</option><option value="4">Mirage</option><option value="5">Lavita</option><option value="6">Marèva 1</option><option value="7">Marèva 2</option><option value="8">Address Villas – Tierra</option><option value="9">Palace Villas – Ostra</option></select></div>
-            <div><label for="qfS">Style</label><select id="qfS"><option value="">Any style</option><option value="0">Chamfered</option><option value="1">Classical</option><option value="2">Contemporary</option><option value="3">Naya</option><option value="4">Faya</option><option value="5">Ayanna</option><option value="6">Aman</option></select></div>
-          </div>
-          <button type="button" class="btn btn-solid qf-go" id="qfGo">Show Villas</button>
-          <p class="qf-count" id="qfCount" aria-live="polite"></p>
+      <div class="uf lf qf-in">
+        <div class="uf-grid">
+          <div><label for="qfC">Cluster</label><select id="qfC"></select></div>
+          <div><label for="qfB">Bedrooms</label><select id="qfB"><option value="">Any</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div>
+          <div><label for="qfS">Style</label><select id="qfS"><option value="">Any</option></select></div>
+          <div><label for="qfBs">Basement</label><select id="qfBs"><option value="">Any</option><option value="1">With basement</option><option value="0">Without basement</option></select></div>
+          <div><label for="qfF">Floors</label><select id="qfF"><option value="">Any</option><option value="3">3 floors</option><option value="4">4 floors</option></select></div>
+          <div><label for="qfP">Minimum plot (sq ft)</label><input id="qfP" inputmode="numeric" placeholder="e.g. 10,000" autocomplete="off"></div>
+          <div><label for="qfPos">Position</label><select id="qfPos"><option value="">Any</option><option value="Mid">Mid</option><option value="Corner">Corner</option></select></div>
+          <div><label for="qfV">View</label><select id="qfV"><option value="">Any</option><option>Canal</option><option>Green Belt</option><option>Park</option><option>Road</option><option>Back to Back</option><option>Landscape</option><option>Amenities</option><option>Retail</option><option>School</option><option>Event Lawn</option><option>Mosque</option></select></div>
+          <div class="uf-dd"><label id="qfDdL">Compass</label><details id="qfDd"><summary id="qfDdS" aria-labelledby="qfDdL qfDdS">Any</summary><div class="uf-dd-p"><label class="uf-chk"><input type="checkbox" name="qfDir" value="N"><span>N</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="NE"><span>NE</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="E"><span>E</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="SE"><span>SE</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="S"><span>S</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="SW"><span>SW</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="W"><span>W</span></label><label class="uf-chk"><input type="checkbox" name="qfDir" value="NW"><span>NW</span></label></div></details></div>
+        </div>
+        <div class="lf-row uf-contact">
+          <div><label for="qfName">Name</label><input id="qfName" autocomplete="name" placeholder="Your name"></div>
+          <div><label for="qfPhone">Phone</label><input id="qfPhone" type="tel" autocomplete="tel" placeholder="+971"></div>
+        </div>
+        <div class="uf-cta">
+          <button type="button" class="btn btn-solid" id="qfSend">Submit</button>
+        </div>
+        <p class="note" id="qfHint" aria-live="polite" style="text-align:center"></p>
+      </div>
         </div>
       </div>
       <div class="hero-art"><svg class="art" viewBox="0 0 600 440" role="img" aria-label="Line drawing of a lagoon-side villa framed by palms">
@@ -368,6 +380,6 @@ if(n)gtag('event',n,{link_url:h.slice(0,150),page_path:location.pathname})}catch
 <script src="/assets/floorplans.js?v=a9655a8d"></script>
 <script src="/assets/market.js?v=59fa8fe5"></script>
 <script src="/assets/units.js?v=5c643e65"></script>
-<script src="/assets/app.js?v=7eaf7786"></script>
+<script src="/assets/app.js?v=bae9aae1"></script>
 </body>
 </html>
