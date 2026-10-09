@@ -148,6 +148,11 @@
       saveLead("Villa Finder inquiry", u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
       wa("Hi Baraa, I used the Oasis Villa Finder on your site.\n\nName: " + u.name + "\nPhone: " + u.phone + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
     }
+    (function(){ var dd = $("ufDd"), sm = $("ufDdS");
+      function upd(){ var v = [].map.call(document.querySelectorAll('input[name="ufDir"]:checked'), function(x){ return x.value; }); sm.textContent = v.length ? v.join(", ") : "Any"; }
+      document.addEventListener("change", function(e){ if (e.target && e.target.name === "ufDir") upd(); });
+      document.addEventListener("click", function(e){ if (dd && dd.open && dd.parentNode && !dd.contains(e.target)) dd.open = false; });
+      window.ufDirUpd = upd; })();
     $("ufSend").addEventListener("click", sendInq);
     $("ufP").addEventListener("blur", function(){ fmtInput(this); });
     selC.addEventListener("change", fillStyles);
@@ -156,7 +161,7 @@
     window.ufApply = function(f){
       selC.value = f.c || ""; fillStyles();
       $("ufB").value = f.b || ""; selS.value = f.s || ""; $("ufBs").value = ""; $("ufF").value = ""; $("ufP").value = "";
-      $("ufPos").value = ""; $("ufV").value = ""; [].forEach.call(document.querySelectorAll('input[name="ufDir"]'), function(x){ x.checked = false; });
+      $("ufPos").value = ""; $("ufV").value = ""; [].forEach.call(document.querySelectorAll('input[name="ufDir"]'), function(x){ x.checked = false; }); if (window.ufDirUpd) window.ufDirUpd();
     };
     window.ufCount = function(f){
       return U.filter(function(u){ return inC(f.c || "", u[0]) && (!f.b || u[2] == f.b) && (!f.s || u[4] == f.s); }).length;
