@@ -114,6 +114,7 @@
   // unit finder: filters -> inquiry (no public table)
   function initFinder(P, SRC, MSG, expose){
     var D = window.OASIS_UNITS, U = D.u;
+    if (!D.c || !D.c.length) D = {c:["Palmiera 1","Palmiera 2","Palmiera 3","Palmiera Collective","Mirage","Lavita","Marèva","Marèva 2","Address Villas – Tierra","Palace Villas – Ostra"], s:["Chamfered","Classical","Contemporary","Naya","Faya","Ayanna","Aman"], u:[]}, U = D.u;
     var selC = $(P+"C"), selS = $(P+"S");
     var o = document.createElement("option"); o.value = ""; o.textContent = "All clusters"; selC.appendChild(o);
     [["0,1,2,3","Palmiera (all phases)"],["6,7","Marèva (both phases)"]].forEach(function(g){ var x = document.createElement("option"); x.value = g[0]; x.textContent = g[1]; selC.appendChild(x); });
@@ -124,6 +125,7 @@
       var c = selC.value, cur = selS.value, set = {};
       U.forEach(function(r){ if (inC(c, r[0])) set[r[4]] = 1; });
       selS.innerHTML = '<option value="">Any</option>';
+      if (!U.length) D.s.forEach(function(n, i){ set[i] = 1; });
       Object.keys(set).sort(function(a,b){return a-b;}).forEach(function(i){ var x = document.createElement("option"); x.value = i; x.textContent = D.s[i]; selS.appendChild(x); });
       if (set[cur]) selS.value = cur;
     }
