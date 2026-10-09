@@ -111,10 +111,10 @@
   }, {passive: true});
 
 
-  // unit finder
+  // unit finder: filters -> inquiry (no public table)
   (function(){
     var D = window.OASIS_UNITS, U = D.u;
-    var selC = $("ufC"), selS = $("ufS"), body = $("ufBody"), BATCH = 10, shown = BATCH, picked = {};
+    var selC = $("ufC"), selS = $("ufS");
     var o = document.createElement("option"); o.value = ""; o.textContent = "All clusters"; selC.appendChild(o);
     [["0,1,2,3","Palmiera (all phases)"],["6,7","Marèva (both phases)"]].forEach(function(g){ var x = document.createElement("option"); x.value = g[0]; x.textContent = g[1]; selC.appendChild(x); });
     D.c.forEach(function(n, i){ var x = document.createElement("option"); x.value = i; x.textContent = n; selC.appendChild(x); });
@@ -128,78 +128,35 @@
       if (set[cur]) selS.value = cur;
     }
     function f(n){ return n ? n.toLocaleString("en-US") : "–"; }
-    function results(){
-      var c = selC.value, b = $("ufB").value, s = selS.value, bs = $("ufBs").value, fl = $("ufF").value, p = num($("ufP").value);
-      var r = U.filter(function(u){
-        return inC(c, u[0]) && (b === "" || u[2] == b) && (s === "" || u[4] == s) &&
-               (bs === "" || u[6] == bs) && (fl === "" || u[5] == fl) && (!p || u[8] >= p);
-      });
-      var so = $("ufSort").value;
-      r.sort(function(x, y){
-        if (so === "p") return y[8] - x[8];
-        if (so === "a") return y[7] - x[7];
-        return x[0] - y[0] || (parseInt(x[1], 10) - parseInt(y[1], 10)) || String(x[1]).localeCompare(String(y[1]));
-      });
-      return r;
+    function crit(){
+      var c = [];
+      if (selC.value !== "") c.push("Cluster: " + cName(selC.value));
+      if ($("ufB").value) c.push("Bedrooms: " + $("ufB").value);
+      if (selS.value !== "") c.push("Style: " + D.s[selS.value]);
+      if ($("ufBs").value !== "") c.push("Basement: " + ($("ufBs").value === "1" ? "with" : "without"));
+      if ($("ufF").value) c.push("Floors: " + $("ufF").value);
+      if (num($("ufP").value)) c.push("Minimum plot: " + f(num($("ufP").value)) + " sq ft");
+      if ($("ufPos").value) c.push("Position: " + $("ufPos").value);
+      if ($("ufV").value) c.push("View: " + $("ufV").value);
+      if ($("ufVastu").checked) c.push("Vastu-compliant: required");
+      return c;
     }
-    function key(u){ return u[0] + ":" + u[1]; }
-    function render(reset){
-      if (reset) shown = BATCH;
-      var r = results();
-      $("ufCount").textContent = r.length ? r.length.toLocaleString("en-US") + (r.length === 1 ? " villa matches" : " villas match") : "No villas match. Try widening your search.";
-      body.innerHTML = "";
-      r.slice(0, shown).forEach(function(u){
-        var tr = document.createElement("tr"), k = key(u);
-        var cells = ['', D.c[u[0]], u[1], u[2] + (u[3] ? " (" + u[3] + ")" : ""), D.s[u[4]], u[5] || "–", u[6] === 1 ? "Yes" : u[6] === 0 ? "No" : "–", u[9] || "–", u[11] || "–", f(u[7]), f(u[8])];
-        cells.forEach(function(t, i){
-          var td = document.createElement("td");
-          if (i === 0){ var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!picked[k];
-            cb.setAttribute("aria-label", "Select unit " + u[1] + ", " + D.c[u[0]]);
-            cb.addEventListener("change", function(){ if (cb.checked) picked[k] = u; else delete picked[k]; cta(); });
-            td.appendChild(cb); }
-          else td.textContent = t;
-          tr.appendChild(td);
-        });
-        var tdA = document.createElement("td"), a = document.createElement("a");
-        a.className = "uf-ask"; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Ask";
-        a.setAttribute("aria-label", "Ask about unit " + u[1] + ", " + D.c[u[0]]);
-        a.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Hi Baraa, is " + D.c[u[0]] + " unit " + u[1] + " (" + u[2] + " BR " + D.s[u[4]] + ", BUA " + f(u[7]) + " sq ft, plot " + f(u[8]) + " sq ft) available? What's the price?");
-        tdA.appendChild(a); tr.insertBefore(tdA, tr.children[1]);
-        body.appendChild(tr);
-      });
-      $("ufMore").hidden = r.length <= shown;
-      cta(r);
+    function sendInq(){
+      var u = need("ufName","ufPhone","ufHint"); if (!u) return;
+      var c = crit();
+      saveLead("Villa Finder inquiry", u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
+      wa("Hi Baraa, I used the Oasis Villa Finder on your site.\nName: " + u.name + "\nPhone: " + u.phone + "\n" + (c.length ? "I'm looking for:\n" + c.join("\n") : "Please send me what's available for sale.") + "\nPlease send me the available units for sale matching this.");
+      $("ufHint").textContent = "Opening WhatsApp. Send the message and I'll reply with the matching units.";
     }
-    function cta(r){
-      r = r || results();
-      var sel = Object.keys(picked).map(function(k){ return picked[k]; });
-      var list = (sel.length ? sel : r.slice(0, 15)).map(function(u){ return D.c[u[0]] + " unit " + u[1]; });
-      $("ufSel").textContent = sel.length ? sel.length + " selected" : (r.length ? "Tick units to ask about specific ones" : "");
-      var crit = [];
-      if (selC.value !== "") crit.push(cName(selC.value)); if ($("ufB").value) crit.push($("ufB").value + " BR");
-      if (selS.value !== "") crit.push(D.s[selS.value]); if ($("ufBs").value !== "") crit.push($("ufBs").value === "1" ? "with basement" : "without basement");
-      if ($("ufF").value) crit.push($("ufF").value + " floors"); if (num($("ufP").value)) crit.push("plot " + f(num($("ufP").value)) + "+ sq ft");
-      var msg = "Hi Baraa, I used the Oasis Villa Finder on your site" + (crit.length ? " (" + crit.join(", ") + ")" : "") + ".\n" +
-        (sel.length ? "I'm interested in:\n" : "Can you check availability for these:\n") + list.join("\n");
-      $("ufAsk").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg);
-      $("ufAsk").classList.toggle("disabled", !r.length && !sel.length);
-      var ck = sel.slice(0, 3).map(function(u){ return u[0] + "-" + u[1]; });
-      $("ufCmp").textContent = sel.length >= 2 ? "Compare Selected (" + Math.min(sel.length, 3) + ")" : "Tick 2 or 3 to Compare";
-      $("ufCmp").classList.toggle("disabled", sel.length < 2);
-      $("ufCmp").setAttribute("data-u", ck.join(","));
-    }
-    selC.addEventListener("change", function(){ fillStyles(); render(true); });
-    ["ufB","ufS","ufBs","ufF","ufSort"].forEach(function(id){ $(id).addEventListener("change", function(){ render(true); }); });
-    $("ufP").addEventListener("input", function(){ render(true); });
+    $("ufSend").addEventListener("click", sendInq);
     $("ufP").addEventListener("blur", function(){ fmtInput(this); });
-    $("ufMore").addEventListener("click", function(){ shown += BATCH; render(false); });
-    $("ufTbl").addEventListener("scroll", function(){ var t = this; if (t.scrollTop + t.clientHeight >= t.scrollHeight - 60 && !$("ufMore").hidden){ shown += BATCH; render(false); } }, {passive:true});
-    fillStyles(); render(true);
+    selC.addEventListener("change", fillStyles);
+    fillStyles();
     // public helpers for quick search and cluster pages
     window.ufApply = function(f){
       selC.value = f.c || ""; fillStyles();
       $("ufB").value = f.b || ""; selS.value = f.s || ""; $("ufBs").value = ""; $("ufF").value = ""; $("ufP").value = "";
-      render(true);
+      $("ufPos").value = ""; $("ufV").value = ""; $("ufVastu").checked = false;
     };
     window.ufCount = function(f){
       return U.filter(function(u){ return inC(f.c || "", u[0]) && (!f.b || u[2] == f.b) && (!f.s || u[4] == f.s); }).length;
@@ -568,7 +525,7 @@ function OasisPDF(jsPDF, A, spec){
       kv.parentNode.insertBefore(bar, kv); bar.after(pOv); pOv.appendChild(kv); if (tbl) pOv.appendChild(tbl);
       pOv.after(pV);
       var cnt = window.ufCount({c: uf});
-      pV.innerHTML = '<p class="cl-v-n"></p><p class="cl-v-t">Search every ' + name + ' villa by bedrooms, style, basement and plot, and pick the units you like.</p><button type="button" class="btn btn-solid">Open the Oasis Villa Finder</button>';
+      pV.innerHTML = '<p class="cl-v-n"></p><p class="cl-v-t">Tell me what you\'re looking for in ' + name + ' and I\'ll send you the available units.</p><button type="button" class="btn btn-solid">Open the Oasis Villa Finder</button>';
       pV.querySelector(".cl-v-n").textContent = cnt.toLocaleString("en-US") + " villas";
       pV.querySelector("button").addEventListener("click", function(){ if (document.getElementById("finder")){ window.ufApply({c: uf}); location.hash = "finder"; } else { try { sessionStorage.setItem("ufPending", JSON.stringify({c: uf})); } catch(e){} location.href = "/tools/villa-finder/"; } });
       var tabs = [["Overview", pOv], ["Villas", pV]];

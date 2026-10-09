@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Poppins:wght@200;300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=6e518c99">
+<link rel="stylesheet" href="/assets/site.css?v=db3b7923">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7T2ZSYNG70"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
@@ -110,7 +110,7 @@ if(n)gtag('event',n,{link_url:h.slice(0,150),page_path:location.pathname})}catch
     <div class="wrap">
       <div class="head">
         <h1 class="pg-h">Oasis Villa Finder</h1>
-        <p>Choose your preferences to see matching villas by unit number. Tap <strong>Ask</strong> on a villa or select several, and I’ll confirm their availability and current prices.</p>
+        <p>Choose your preferences in details and I'll send you the available units for sale matching your inquiry.</p>
       </div>
       <div class="uf lf">
         <div class="uf-grid">
@@ -120,23 +120,18 @@ if(n)gtag('event',n,{link_url:h.slice(0,150),page_path:location.pathname})}catch
           <div><label for="ufBs">Basement</label><select id="ufBs"><option value="">Any</option><option value="1">With basement</option><option value="0">Without basement</option></select></div>
           <div><label for="ufF">Floors</label><select id="ufF"><option value="">Any</option><option value="3">3 floors</option><option value="4">4 floors</option></select></div>
           <div><label for="ufP">Minimum plot (sq ft)</label><input id="ufP" inputmode="numeric" placeholder="e.g. 10,000" autocomplete="off"></div>
+          <div><label for="ufPos">Position</label><select id="ufPos"><option value="">Any</option><option value="Mid">Mid</option><option value="Corner">Corner</option></select></div>
+          <div><label for="ufV">View</label><select id="ufV"><option value="">Any</option><option>Canal</option><option>Green Belt</option><option>Park</option><option>Road</option><option>Back to Back</option><option>Landscape</option><option>Amenities</option><option>Retail</option><option>School</option><option>Event Lawn</option><option>Mosque</option></select></div>
+          <div class="uf-vst"><label class="uf-chk" for="ufVastu"><input type="checkbox" id="ufVastu"><span>Vastu-compliant villa</span></label></div>
         </div>
-        <div class="uf-bar">
-          <p class="uf-count" id="ufCount" aria-live="polite"></p>
-          <div class="uf-sort"><label for="ufSort">Sort by</label><select id="ufSort"><option value="u">Unit number</option><option value="p">Largest plot</option><option value="a">Largest BUA</option></select></div>
+        <div class="lf-row uf-contact">
+          <div><label for="ufName">Name</label><input id="ufName" autocomplete="name" placeholder="Your name"></div>
+          <div><label for="ufPhone">Phone</label><input id="ufPhone" type="tel" autocomplete="tel" placeholder="+971"></div>
         </div>
-        <div class="vastu"><a class="btn btn-solid" href="https://wa.me/971521325215?text=Hi%20Baraa%2C%20I%27m%20looking%20for%20a%20Vastu-compliant%20villa%20in%20The%20Oasis.%20Which%20options%20are%20available%3F" target="_blank" rel="noopener">Need a Vastu Villa?</a></div>
-        <p class="note uf-note">Shows every unit of that type in the cluster, not only those for sale. I'll confirm which are available and at what price.</p>
-        <div class="tbl uf-tbl" id="ufTbl"><table>
-          <thead><tr><th><span class="sr">Select</span></th><th><span class="sr">Ask</span></th><th>Cluster</th><th>Unit</th><th>Beds</th><th>Style</th><th>Floors</th><th>Basement</th><th>View</th><th>Position</th><th>BUA sq ft</th><th>Plot sq ft</th></tr></thead>
-          <tbody id="ufBody"></tbody>
-        </table></div>
-        <div class="uf-more"><button type="button" class="btn btn-line" id="ufMore" hidden>Show more</button></div>
         <div class="uf-cta">
-          <a class="btn btn-solid" id="ufAsk" href="#" target="_blank" rel="noopener">Ask about these units</a>
-          <a class="btn btn-line disabled" id="ufCmp" href="/tools/compare-villas/">Compare Selected</a>
-          <span class="note" id="ufSel"></span>
+          <button type="button" class="btn btn-solid" id="ufSend">Send my inquiry</button>
         </div>
+        <p class="note" id="ufHint" aria-live="polite" style="text-align:center"></p>
       </div>
     </div>
   </section>
@@ -237,6 +232,6 @@ if(n)gtag('event',n,{link_url:h.slice(0,150),page_path:location.pathname})}catch
 <script src="/assets/floorplans.js?v=a9655a8d"></script>
 <script src="/assets/market.js?v=59fa8fe5"></script>
 <script src="/assets/units.js?v=5c643e65"></script>
-<script src="/assets/app.js?v=c096f674"></script>
+<script src="/assets/app.js?v=04060abb"></script>
 </body>
 </html>
