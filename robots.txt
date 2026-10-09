@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://site-rust-two-58.vercel.app/sitemap.xml
+Sitemap: https://baraanoura.com/sitemap.xml
