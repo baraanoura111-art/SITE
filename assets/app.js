@@ -378,13 +378,13 @@ function OasisPDF(jsPDF, A, spec){
   });
 
   // details card: name, mobile and Broker/Client, shown after Submit / Download
-  function askLead(title, cb){
+  function askLead(title, cb, extra){
     var ov = document.getElementById("leadCard");
     if (!ov){
       ov = document.createElement("div"); ov.id = "leadCard"; ov.className = "lc-ov"; ov.hidden = true;
       ov.innerHTML = '<div class="lc" role="dialog" aria-modal="true" aria-labelledby="lcT"><button type="button" class="lc-x" aria-label="Close">×</button>' +
         '<p class="lc-t" id="lcT"></p><div class="lc-f lf"><div><label for="lcName">Name</label><input id="lcName" autocomplete="name" placeholder="Your name"></div>' +
-        '<div><label for="lcPhone">Mobile number</label><input id="lcPhone" type="tel" autocomplete="tel" placeholder="+971"></div>' +
+        '<div><label for="lcPhone">Mobile number</label><input id="lcPhone" type="tel" autocomplete="tel" placeholder="+971"></div><div id="lcX" class="lc-x2"></div>' +
         '<fieldset class="lc-r"><legend>I am a</legend><label class="lc-o"><input type="radio" name="lcRole" value="Client"><span>Client</span></label><label class="lc-o"><input type="radio" name="lcRole" value="Broker"><span>Broker</span></label></fieldset>' +
         '<p class="lc-h" id="lcH" aria-live="polite"></p><button type="button" class="btn btn-solid lc-go" id="lcGo">Send</button></div></div>';
       document.body.appendChild(ov);
@@ -394,6 +394,7 @@ function OasisPDF(jsPDF, A, spec){
     var go = document.getElementById("lcGo"), ng = go.cloneNode(true); go.parentNode.replaceChild(ng, go);
     document.getElementById("lcT").textContent = title || "Your details";
     document.getElementById("lcH").textContent = "";
+    document.getElementById("lcX").innerHTML = extra || "";
     ng.addEventListener("click", function(){
       var n = document.getElementById("lcName").value.trim(), ph = document.getElementById("lcPhone").value.trim(), r = ov.querySelector('input[name="lcRole"]:checked'), h = document.getElementById("lcH");
       if (!n){ h.textContent = "Add your name to continue."; document.getElementById("lcName").focus(); return; }
@@ -434,14 +435,20 @@ function OasisPDF(jsPDF, A, spec){
     });
   });
 
-  // valoria waitlist
-  if ($("wlForm")) $("wlForm").addEventListener("submit", function(e){
+  // valoria waitlist: details card (name, mobile, Client/Broker) after the button
+  function wlSend(u, beds, budget, type){
+    saveLead("Valoria waitlist", u.name, u.phone, "Bedrooms: " + beds + "; Budget: AED " + budget + (type ? "; Buying as: " + type : "") + "; " + u.role);
+    wa("Hi Baraa, please add me to the Valoria waitlist.\nName: " + u.name + "\nPhone: " + u.phone + "\nI am a: " + u.role + "\nBedrooms: " + beds + "\nBudget: AED " + budget + (type ? "\nBuying as: " + type : ""));
+  }
+  if ($("wlForm")) if ($("wlForm")) $("wlForm").addEventListener("submit", function(e){
     e.preventDefault();
-    var u = need("wlName","wlPhone","wlHint"); if (!u) return;
-    saveLead("Valoria waitlist", u.name, u.phone, "Bedrooms: " + $("wlBeds").value + "; Budget: AED " + $("wlBudget").value + "; Buying as: " + $("wlType").value);
-    wa("Hi Baraa, please add me to the Valoria waitlist.\nName: " + u.name + "\nPhone: " + u.phone +
-      "\nBedrooms: " + $("wlBeds").value + "\nBudget: AED " + $("wlBudget").value + "\nBuying as: " + $("wlType").value);
-    $("wlHint").textContent = "Opening WhatsApp. Send the message to confirm your place.";
+    askLead("Join the Valoria waitlist", function(u){ wlSend(u, $("wlBeds").value, $("wlBudget").value, $("wlType").value); });
+  });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest(".lp-wl"); if (!b) return;
+    askLead("Join the Valoria waitlist", function(u){ wlSend(u, $("lcBeds").value, $("lcBudget").value, ""); },
+      '<div><label for="lcBeds">Bedrooms</label><select id="lcBeds"><option>4 BR</option><option>5 BR</option><option>6 BR</option><option>Open to any</option></select></div>' +
+      '<div><label for="lcBudget">Budget (AED)</label><select id="lcBudget"><option>10–15M</option><option>15–20M</option><option>20M+</option></select></div>');
   });
 
   // sell your villa
