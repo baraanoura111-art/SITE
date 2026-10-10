@@ -861,7 +861,7 @@ function OasisPDF(jsPDF, A, spec){
     {id:"factsheet", title:"Oasis Buyer Guide", s:["factsheet"]},
     {id:"privacy", title:"Privacy Policy", s:["privacy"]},
     {id:"styles", title:"Style & Floorplan", s:["styles","floorplans"]},
-    {id:"gallery", title:"Gallery", s:["gallery"]},
+    {id:"gallery", title:"Gallery", s:["gallery","interiors"]},
     {id:"calculators", title:"Buyer Tools", s:["calculators"]},
     {id:"finder", title:"Oasis Villa Finder", s:["finder"], parent:"calculators"},
     {id:"comparev", title:"Compare Villas", s:["comparev"], parent:"calculators"},
