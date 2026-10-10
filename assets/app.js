@@ -624,6 +624,13 @@ function OasisPDF(jsPDF, A, spec){
       return lo === hi ? "AED " + Math.round(lo).toLocaleString("en-US") : "AED " + Math.round(lo).toLocaleString("en-US") + "–" + Math.round(hi).toLocaleString("en-US");
     }
     function cpOf(k){ var b = (M.build || {})[k]; return b && num(b.pct) ? b : null; }
+
+    var ct = document.getElementById("cuTbl");
+    if (ct){
+      var nm = {"Address Tierra":"Address Villas Tierra","Palace Ostra":"Palace Villas Ostra"}, rows = '<div class="r h"><span>Cluster</span><span>Constructed</span></div>';
+      Object.keys(M.build || {}).forEach(function(k){ var b = cpOf(k); if (!b) return; rows += '<div class="r"><span>' + (nm[k] || k) + '</span><b>' + (Math.round(num(b.pct) * 100) / 100) + '%</b></div>'; });
+      ct.innerHTML = rows;
+    }
     document.querySelectorAll("[data-psf]").forEach(function(el){ el.textContent = psfOf(el.getAttribute("data-psf")); });
     document.querySelectorAll("[data-psf-t]").forEach(function(el){ el.textContent = psfOf(el.getAttribute("data-psf-t")); });
     document.querySelectorAll("[data-cp-t]").forEach(function(el){
@@ -650,6 +657,17 @@ function OasisPDF(jsPDF, A, spec){
   };
   window.oasisMarket();
 
+
+  // phone: Buyer Guide box matches the newsletter box height
+  (function(){
+    function sync(){
+      var f = document.querySelector("#factsheet .fs"), n = document.querySelector("form.nl");
+      if (!f || !n || !f.offsetParent || !n.offsetParent) return;
+      f.style.minHeight = ""; f.style.justifyContent = "";
+      if (window.innerWidth <= 700){ var h = n.getBoundingClientRect().height; if (h > f.getBoundingClientRect().height){ f.style.minHeight = h + "px"; f.style.alignContent = "center"; } }
+    }
+    window.addEventListener("load", sync); window.addEventListener("resize", sync); setTimeout(sync, 600);
+  })();
   // testimonials carousel
   (function(){
     var tr = $("tmTrack"); if (!tr) return;
@@ -861,7 +879,7 @@ function OasisPDF(jsPDF, A, spec){
     {id:"factsheet", title:"Oasis Buyer Guide", s:["factsheet"]},
     {id:"privacy", title:"Privacy Policy", s:["privacy"]},
     {id:"styles", title:"Style & Floorplan", s:["styles","floorplans"]},
-    {id:"gallery", title:"Gallery", s:["gallery","interiors"]},
+    {id:"gallery", title:"Gallery", s:["gallery","community","interiors"]},
     {id:"calculators", title:"Buyer Tools", s:["calculators"]},
     {id:"finder", title:"Oasis Villa Finder", s:["finder"], parent:"calculators"},
     {id:"comparev", title:"Compare Villas", s:["comparev"], parent:"calculators"},
