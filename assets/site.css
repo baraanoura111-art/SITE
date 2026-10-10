@@ -1316,6 +1316,24 @@ h1,h2,h3,.qf-h,.nl-t,.lt-name,.pb-title,.about-h,.hm-t h2,.find-socials h3,.fs h
 .uf-dd{position:relative}.uf-dd details{position:relative}.uf-dd summary{list-style:none;cursor:pointer;padding:10px 28px 10px 2px;border-bottom:1px solid var(--line);font-size:18px;color:var(--ink);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23CDC3B5' stroke-width='1.4'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 6px center;min-height:44px;box-sizing:border-box}.uf-dd summary::-webkit-details-marker{display:none}.uf-dd-p{position:absolute;z-index:20;left:0;right:0;top:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:4px 8px;padding:12px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.35)}.uf-dd-p .uf-chk{min-height:36px}@media (max-width:420px){.uf-dd-p{grid-template-columns:repeat(2,1fr)}}
 .qf .uf,.qf .uf label{text-align:left}.qf .uf-cta{justify-content:center}.qf .note{text-align:center}
 .uf .uf-grid{gap:10px 20px}.uf .uf-grid label,.uf .uf-dd>label,.uf .uf-contact label{font-size:15px;letter-spacing:.08em;color:var(--ink);margin-bottom:2px}.uf .uf-grid select,.uf .uf-grid input,.uf .uf-dd summary,.uf .uf-contact input{font-size:14px;min-height:34px;padding-top:4px;padding-bottom:4px}.uf .uf-dd summary{min-height:34px;padding-right:26px}.uf-contact{margin-top:14px}.uf .uf-cta{margin:16px 0 4px}.qf{padding:18px 20px;margin-top:20px}.qf-h{margin-bottom:10px !important}.uf-dd-p .uf-chk{min-height:30px;font-size:14px}
+
+/* lead card */
+.lc-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:18px}.lc-ov[hidden]{display:none}
+.lc{position:relative;width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-top:2px solid var(--brass);padding:28px 24px 24px;color:var(--ink);text-align:left}
+.lc-x{position:absolute;top:6px;right:10px;background:none;border:0;color:var(--muted);font-size:28px;line-height:1;cursor:pointer;min-width:44px;min-height:44px}
+.lc-t{font-family:var(--display);font-weight:300;font-size:22px;margin:0 0 16px;padding-right:30px}
+.lc-f>div{margin-bottom:14px}
+.lc-r{border:0;padding:0;margin:0 0 6px;display:flex;gap:12px;flex-wrap:wrap}.lc-r legend{font-size:15px;letter-spacing:.08em;color:var(--ink);margin-bottom:8px;padding:0;width:100%}
+.lc-o{flex:1;min-width:120px;margin:0 !important;cursor:pointer}.lc-o input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;min-height:0}
+.lc-o span{display:block;text-align:center;padding:10px 12px;border:1px solid var(--line);color:var(--ink);font-size:15px}
+.lc-o input:checked+span{background:var(--brass);border-color:var(--brass);color:var(--bg)}.lc-o input:focus-visible+span{outline:2px solid var(--brass);outline-offset:2px}
+.lc-h{min-height:20px;margin:6px 0 8px;font-size:14px;color:var(--muted)}
+.lc-go{width:100%}
+/* layout fixes */
+.fp-box .fp-result{border:0 !important;background:transparent !important}
+form .btn-portal{justify-self:center !important;grid-column:1 / -1}form .hint{grid-column:1 / -1;justify-self:center;text-align:center}
+#yShare{margin:0 auto}.finder-actions:has(#yShare){justify-content:center}
+.hm-box .hm-soc{flex:0 0 100%;width:100%;max-width:none;margin:26px 0 0;padding-top:22px;border-top:1px solid var(--line)}.hm-box .hm-soc h3{font-size:18px !important;margin:0 0 12px !important}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}

@@ -113,8 +113,8 @@
 
   // unit finder: filters -> inquiry (no public table)
   function initFinder(P, SRC, MSG, expose){
-    var D = window.OASIS_UNITS, U = D.u;
-    if (!D.c || !D.c.length) D = {c:["Palmiera 1","Palmiera 2","Palmiera 3","Palmiera Collective","Mirage","Lavita","Marèva","Marèva 2","Address Villas – Tierra","Palace Villas – Ostra"], s:["Chamfered","Classical","Contemporary","Naya","Faya","Ayanna","Aman"], u:[]}, U = D.u;
+    var D = window.OASIS_UNITS || {}, U = D.u || [];
+    if (!D || !D.c || !D.c.length) D = {c:["Palmiera 1","Palmiera 2","Palmiera 3","Palmiera Collective","Mirage","Lavita","Marèva","Marèva 2","Address Villas – Tierra","Palace Villas – Ostra"], s:["Chamfered","Classical","Contemporary","Naya","Faya","Ayanna","Aman"], u:[]}, U = D.u;
     var selC = $(P+"C"), selS = $(P+"S");
     var o = document.createElement("option"); o.value = ""; o.textContent = "All clusters"; selC.appendChild(o);
     [["0,1,2,3","Palmiera (all phases)"],["6,7","Marèva (both phases)"]].forEach(function(g){ var x = document.createElement("option"); x.value = g[0]; x.textContent = g[1]; selC.appendChild(x); });
@@ -146,10 +146,11 @@
     }
     var dirUpd;
     function sendInq(){
-      var u = need(P+"Name",P+"Phone",P+"Hint"); if (!u) return;
       var c = crit();
-      saveLead(SRC, u.name, u.phone, c.length ? c.join("; ") : "No filters (open search)");
-      wa(MSG + "\n\nName: " + u.name + "\nPhone: " + u.phone + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
+      askLead("Where shall I send the matching units?", function(u){
+      saveLead(SRC, u.name, u.phone, "Role: " + u.role + "; " + (c.length ? c.join("; ") : "No filters (open search)"));
+      wa(MSG + "\n\nName: " + u.name + "\nPhone: " + u.phone + "\nI am a: " + u.role + "\n\n" + (c.length ? "My requirements:\n" + c.map(function(x){ return "• " + x; }).join("\n") : "My requirements: open search, no filters") + "\n\nPlease send me the available units for sale matching this.");
+      });
     }
     (function(){ var dd = $(P+"Dd"), sm = $(P+"DdS");
       function upd(){ var v = [].map.call(document.querySelectorAll('input[name="'+P+'Dir"]:checked'), function(x){ return x.value; }); sm.textContent = v.length ? v.join(", ") : "Any"; }
@@ -170,8 +171,8 @@
       return U.filter(function(u){ return inC(f.c || "", u[0]) && (!f.b || u[2] == f.b) && (!f.s || u[4] == f.s); }).length;
     };
   }
-  initFinder("uf", "Villa Finder inquiry", "Hi Baraa, I used the Oasis Villa Finder on your site.", true);
-  initFinder("qf", "Home Find Your Villa", "Hi Baraa, I used Find Your Villa on your website.", false);
+  try { initFinder("uf", "Villa Finder inquiry", "Hi Baraa, I used the Oasis Villa Finder on your site.", true); } catch (e) { if (window.console) console.error("finder", e); }
+  try { initFinder("qf", "Home Find Your Villa", "Hi Baraa, I used Find Your Villa on your website.", false); } catch (e) { if (window.console) console.error("home finder", e); }
 
   // ===== PDF reports (dark theme, Jost, logo) =====
 // Shared PDF builder for The Oasis Specialist (browser + node)
@@ -252,16 +253,19 @@ function OasisPDF(jsPDF, A, spec){
   function today(){ return new Date().toLocaleDateString("en-GB", {day:"numeric", month:"long", year:"numeric"}); }
   function pdfFlow(p, make, fileBase){
     $(p + "Btn").addEventListener("click", function(){
-      var u = need(p + "Name", p + "Phone", p + "Hint"); if (!u) return;
-      saveLead(p === "pdf" ? "Purchase fee calculator PDF" : "Rental yield estimator PDF", u.name, u.phone,
-        p === "pdf" ? "Purchase price: AED " + ($("cPrice").value || "–") : "Price: AED " + ($("yPrice").value || "–") + "; Annual rent: AED " + ($("yRent").value || "–"));
-      var btn = $(p + "Btn"); btn.disabled = true; $(p + "Hint").textContent = "Preparing your PDF…";
-      pdfReady().then(function(){
-        var J = make(u); if (!J){ btn.disabled = false; return; }
-        J.save(fileBase + " - " + u.name + ".pdf");
-        $(p + "Hint").textContent = "Downloaded. Check your downloads folder.";
-      }).catch(function(e){ if (window.console) console.error(e); $(p + "Hint").textContent = "Sorry, the PDF couldn't be created on this device. Please try another browser, or message me and I'll send it."; })
-        .then(function(){ btn.disabled = false; });
+      if (p === "pdf" && $("cResult").hidden){ $("pdfHint").textContent = "Enter a purchase price first."; return; }
+      if (p === "ypdf" && $("yResult").hidden){ $("ypdfHint").textContent = "Enter the price and expected rent first."; return; }
+      askLead("Where shall I send your PDF?", function(u){
+        saveLead(p === "pdf" ? "Purchase fee calculator PDF" : "Rental yield estimator PDF", u.name, u.phone,
+          "Role: " + u.role + "; " + (p === "pdf" ? "Purchase price: AED " + ($("cPrice").value || "–") : "Price: AED " + ($("yPrice").value || "–") + "; Annual rent: AED " + ($("yRent").value || "–")));
+        var btn = $(p + "Btn"); btn.disabled = true; $(p + "Hint").textContent = "Preparing your PDF…";
+        pdfReady().then(function(){
+          var J = make(u); if (!J){ btn.disabled = false; return; }
+          J.save(fileBase + " - " + u.name + ".pdf");
+          $(p + "Hint").textContent = "Downloaded. Check your downloads folder.";
+        }).catch(function(e){ if (window.console) console.error(e); $(p + "Hint").textContent = "Sorry, the PDF couldn't be created on this device. Please try another browser, or message me and I'll send it."; })
+          .then(function(){ btn.disabled = false; });
+      });
     });
   }
   // purchase fees
@@ -373,6 +377,33 @@ function OasisPDF(jsPDF, A, spec){
       if (cnt) cnt.textContent = (cur + 1) + " / " + sl.length; }, 60); });
   });
 
+  // details card: name, mobile and Broker/Client, shown after Submit / Download
+  function askLead(title, cb){
+    var ov = document.getElementById("leadCard");
+    if (!ov){
+      ov = document.createElement("div"); ov.id = "leadCard"; ov.className = "lc-ov"; ov.hidden = true;
+      ov.innerHTML = '<div class="lc" role="dialog" aria-modal="true" aria-labelledby="lcT"><button type="button" class="lc-x" aria-label="Close">×</button>' +
+        '<p class="lc-t" id="lcT"></p><div class="lc-f lf"><div><label for="lcName">Name</label><input id="lcName" autocomplete="name" placeholder="Your name"></div>' +
+        '<div><label for="lcPhone">Mobile number</label><input id="lcPhone" type="tel" autocomplete="tel" placeholder="+971"></div>' +
+        '<fieldset class="lc-r"><legend>I am a</legend><label class="lc-o"><input type="radio" name="lcRole" value="Client"><span>Client</span></label><label class="lc-o"><input type="radio" name="lcRole" value="Broker"><span>Broker</span></label></fieldset>' +
+        '<p class="lc-h" id="lcH" aria-live="polite"></p><button type="button" class="btn btn-solid lc-go" id="lcGo">Send</button></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener("click", function(e){ if (e.target === ov || (e.target.closest && e.target.closest(".lc-x"))) ov.hidden = true; });
+      document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !ov.hidden) ov.hidden = true; });
+    }
+    var go = document.getElementById("lcGo"), ng = go.cloneNode(true); go.parentNode.replaceChild(ng, go);
+    document.getElementById("lcT").textContent = title || "Your details";
+    document.getElementById("lcH").textContent = "";
+    ng.addEventListener("click", function(){
+      var n = document.getElementById("lcName").value.trim(), ph = document.getElementById("lcPhone").value.trim(), r = ov.querySelector('input[name="lcRole"]:checked'), h = document.getElementById("lcH");
+      if (!n){ h.textContent = "Add your name to continue."; document.getElementById("lcName").focus(); return; }
+      if (ph.replace(/\D/g, "").length < 7){ h.textContent = "Add a mobile number so I can reach you."; document.getElementById("lcPhone").focus(); return; }
+      if (!r){ h.textContent = "Choose Broker or Client."; return; }
+      ov.hidden = true; cb({name: n, phone: ph, role: r.value});
+    });
+    ov.hidden = false; setTimeout(function(){ document.getElementById("lcName").focus(); }, 30);
+  }
+
   // shared lead helpers
   function wa(msg){ window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank", "noopener"); }
   function need(nameId, phoneId, hintId){
@@ -395,11 +426,12 @@ function OasisPDF(jsPDF, A, spec){
   var FS_PDF = "/factsheet/The-Oasis-Fact-Sheet-2026.pdf";
   $("fsForm").addEventListener("submit", function(e){
     e.preventDefault();
-    var u = need("fsName","fsPhone","fsHint"); if (!u) return;
-    saveLead("Buyer Guide download", u.name, u.phone, "");
-    var a = document.createElement("a"); a.href = FS_PDF; a.download = "The-Oasis-Buyer-Guide-2026.pdf";
-    document.body.appendChild(a); a.click(); a.remove();
-    $("fsHint").innerHTML = 'Thanks, ' + u.name.replace(/[<>&"]/g, "") + '. Your Buyer Guide is downloading. If it doesn\u2019t start, <a href="' + FS_PDF + '" download>tap here</a>.';
+    askLead("Where shall I send your Buyer Guide?", function(u){
+      saveLead("Buyer Guide download", u.name, u.phone, "Role: " + u.role);
+      var a = document.createElement("a"); a.href = FS_PDF; a.download = "The-Oasis-Buyer-Guide-2026.pdf";
+      document.body.appendChild(a); a.click(); a.remove();
+      $("fsHint").innerHTML = 'Your Buyer Guide is downloading. If it doesn\u2019t start, <a href="' + FS_PDF + '" download>tap here</a>.';
+    });
   });
 
   // valoria waitlist
@@ -415,14 +447,12 @@ function OasisPDF(jsPDF, A, spec){
   // sell your villa
   $("sellForm").addEventListener("submit", function(e){
     e.preventDefault();
-    var u = need("sName","sPhone","sHint"); if (!u) return;
     if (!$("sUnit").value.trim()){ $("sHint").textContent = "Add your unit number so I can pull comparable sales."; $("sUnit").focus(); return; }
-    var lines = ["Hi Baraa, I'd like a valuation for my villa.", "Name: " + u.name, "Phone: " + u.phone,
+    var lines = ["Hi Baraa, I'd like a valuation for my villa.",
       "Cluster: " + $("sCluster").value, "Type: " + $("sBeds").value + " " + $("sStyle").value];
     lines.push("Unit: " + $("sUnit").value.trim());
     if ($("sPaid").value.trim()) lines.push("Paid to developer: " + $("sPaid").value.trim() + "%");
     if ($("sAsk").value.trim()) lines.push("Price in mind: AED " + $("sAsk").value.trim());
-    saveLead("Sell with me valuation", u.name, u.phone, lines.slice(3).join("; "));
     wa(lines.join("\n"));
     $("sHint").textContent = "Opening WhatsApp. Send the message and I'll prepare your valuation.";
   });
@@ -921,22 +951,14 @@ function OasisPDF(jsPDF, A, spec){
 
   if ($("svcForm")) $("svcForm").addEventListener("submit", function(e){
     e.preventDefault();
-    var name = $("sfName").value.trim(), hint = $("sfHint"), phone = $("sfPhone").value.trim(), need = $("sfNeed").value;
-    if (!name){ hint.textContent = "Add your name so I know who's writing."; $("sfName").focus(); return; }
-    var msg = "Hi Baraa, I'm " + name + ". I'm interested in: " + need + "." + (phone ? "\nMy number: " + phone : "");
-    if (window.saveLead) window.saveLead("Services form", name, phone, "Interested in: " + need);
+    var hint = $("sfHint"), need = $("sfNeed").value;
     hint.textContent = "Opening WhatsApp…";
-    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent("Hi Baraa, I'm interested in: " + need + "."), "_blank", "noopener");
   });
   $("leadForm").addEventListener("submit", function(e){
     e.preventDefault();
-    var name = $("lName").value.trim(), hint = $("formHint");
-    if (!name){ hint.textContent = "Add your name so I know who's writing."; $("lName").focus(); return; }
-    var msg = "Hi Baraa, I'm " + name + ". I'm interested in: " + $("lNeed").value + ".";
-    var det = $("lMsg").value.trim(), phone = $("lPhone").value.trim();
-    if (det) msg += "\n" + det;
-    if (phone) msg += "\nMy number: " + phone;
-    if (window.saveLead) window.saveLead("Contact form", name, phone, "Interested in: " + $("lNeed").value + (det ? "; Message: " + det : ""));
+    var hint = $("formHint"), det = $("lMsg").value.trim();
+    var msg = "Hi Baraa, I'm interested in: " + $("lNeed").value + "." + (det ? "\n" + det : "");
     hint.textContent = "Opening WhatsApp…";
     window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
   });
