@@ -313,8 +313,8 @@ function OasisPDF(jsPDF, A, spec){
   (function(){
     var v = document.querySelector("#heroVideo video"), btn = document.getElementById("hvSound");
     if (!v || !btn) return;
-    // load the film only when it scrolls into view; phones get the lighter file
-    function start(){ if (v.getAttribute("src")) return; v.src = (window.innerWidth <= 700 && v.getAttribute("data-src-m")) ? v.getAttribute("data-src-m") : v.getAttribute("data-src"); v.play().catch(function(){}); }
+    // load the film only when it scrolls into view
+    function start(){ if (v.getAttribute("src")) return; v.src = v.getAttribute("data-src"); v.play().catch(function(){}); }
     if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(en){ if (en[0].isIntersecting){ start(); io.disconnect(); } }, {rootMargin: "200px"}); io.observe(v); } else { setTimeout(start, 3000); }
     btn.addEventListener("click", function(){
       start(); v.muted = !v.muted; if (!v.muted) v.play();
@@ -368,6 +368,14 @@ function OasisPDF(jsPDF, A, spec){
 
   // carousels (gallery + clusters)
   document.querySelectorAll(".car").forEach(function(car){
+    // defer photos beyond the first two so the page paints fast; they load right after the page has loaded
+    var cimgs = car.querySelectorAll(".slide img");
+    cimgs.forEach(function(im, i){ if (i >= 2 && im.getAttribute("src") && !im.hasAttribute("data-from")){ im.setAttribute("data-s", im.getAttribute("src")); im.removeAttribute("src"); } });
+    function loadRest(){ cimgs.forEach(function(im){ var u = im.getAttribute("data-s"); if (u){ im.removeAttribute("data-s"); im.setAttribute("src", u); } }); }
+    car.addEventListener("pointerdown", loadRest, {once: true}); car.addEventListener("keydown", loadRest, {once: true});
+    car.querySelectorAll(".car-btn").forEach(function(b){ b.addEventListener("click", loadRest, {once: true}); });
+    window.addEventListener("load", function(){ setTimeout(loadRest, 1800); });
+    if (cimgs[0]) cimgs[0].setAttribute("fetchpriority", "high");
     var track = car.querySelector(".car-track"), sl = track.querySelectorAll(".slide"), cnt = car.querySelector(".car-count"), cur = 0, st;
     if (sl.length < 2) return;
     function go(k){ sl = track.querySelectorAll(".slide"); k = (k + sl.length) % sl.length; track.scrollTo({left: sl[k].offsetLeft - track.offsetLeft, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); }
