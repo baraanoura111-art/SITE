@@ -313,8 +313,11 @@ function OasisPDF(jsPDF, A, spec){
   (function(){
     var v = document.querySelector("#heroVideo video"), btn = document.getElementById("hvSound");
     if (!v || !btn) return;
+    // load the film only when it scrolls into view; phones get the lighter file
+    function start(){ if (v.getAttribute("src")) return; v.src = (window.innerWidth <= 700 && v.getAttribute("data-src-m")) ? v.getAttribute("data-src-m") : v.getAttribute("data-src"); v.play().catch(function(){}); }
+    if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(en){ if (en[0].isIntersecting){ start(); io.disconnect(); } }, {rootMargin: "200px"}); io.observe(v); } else { setTimeout(start, 3000); }
     btn.addEventListener("click", function(){
-      v.muted = !v.muted; if (!v.muted) v.play();
+      start(); v.muted = !v.muted; if (!v.muted) v.play();
       btn.setAttribute("aria-pressed", v.muted ? "false" : "true");
       btn.querySelector("span").textContent = v.muted ? "Sound on" : "Sound off";
     });
