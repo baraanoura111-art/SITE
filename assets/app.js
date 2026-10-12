@@ -309,17 +309,30 @@ function OasisPDF(jsPDF, A, spec){
   })();
 
 
-  // home film: sound toggle
+  // home film: autoplay once, with sound when the browser allows it
   (function(){
     var v = document.querySelector("#heroVideo video"), btn = document.getElementById("hvSound");
     if (!v || !btn) return;
-    // load the film only when it scrolls into view
-    function start(){ if (v.getAttribute("src")) return; v.src = v.getAttribute("data-src"); v.play().catch(function(){}); }
+    var label = btn.querySelector("span"), done = false;
+    function ui(){
+      if (done){ label.textContent = "Replay"; btn.setAttribute("aria-pressed","false"); btn.style.display = ""; return; }
+      if (v.muted){ label.textContent = "Sound on"; btn.setAttribute("aria-pressed","false"); btn.style.display = ""; }
+      else { label.textContent = "Sound off"; btn.setAttribute("aria-pressed","true"); btn.style.display = ""; }
+    }
+    function start(){
+      if (v.getAttribute("src")) return;
+      v.src = v.getAttribute("data-src"); v.muted = false;
+      var p = v.play();
+      if (p && p.catch) p.catch(function(){ v.muted = true; var q = v.play(); if (q && q.catch) q.catch(function(){}); ui(); });
+    }
     if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(en){ if (en[0].isIntersecting){ start(); io.disconnect(); } }, {rootMargin: "200px"}); io.observe(v); } else { setTimeout(start, 3000); }
+    v.addEventListener("volumechange", ui);
+    v.addEventListener("ended", function(){ done = true; ui(); });
     btn.addEventListener("click", function(){
-      start(); v.muted = !v.muted; if (!v.muted) v.play();
-      btn.setAttribute("aria-pressed", v.muted ? "false" : "true");
-      btn.querySelector("span").textContent = v.muted ? "Sound on" : "Sound off";
+      if (!v.getAttribute("src")) { start(); return; }
+      if (done){ done = false; v.currentTime = 0; v.muted = false; v.play().catch(function(){ v.muted = true; v.play(); ui(); }); ui(); return; }
+      v.muted = !v.muted; if (v.paused) v.play();
+      ui();
     });
   })();
 
