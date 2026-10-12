@@ -309,15 +309,14 @@ function OasisPDF(jsPDF, A, spec){
   })();
 
 
-  // home film: autoplay once, with sound when the browser allows it
+  // home film #1: autoplay once, with sound when the browser allows it
   (function(){
     var v = document.querySelector("#heroVideo video"), btn = document.getElementById("hvSound");
     if (!v || !btn) return;
     var label = btn.querySelector("span"), done = false;
     function ui(){
-      if (done){ label.textContent = "Replay"; btn.setAttribute("aria-pressed","false"); btn.style.display = ""; return; }
-      if (v.muted){ label.textContent = "Sound on"; btn.setAttribute("aria-pressed","false"); btn.style.display = ""; }
-      else { label.textContent = "Sound off"; btn.setAttribute("aria-pressed","true"); btn.style.display = ""; }
+      if (done){ label.textContent = "Replay"; btn.setAttribute("aria-pressed","false"); return; }
+      label.textContent = v.muted ? "Sound on" : "Sound off"; btn.setAttribute("aria-pressed", v.muted ? "false" : "true");
     }
     function start(){
       if (v.getAttribute("src")) return;
@@ -333,6 +332,19 @@ function OasisPDF(jsPDF, A, spec){
       if (done){ done = false; v.currentTime = 0; v.muted = false; v.play().catch(function(){ v.muted = true; v.play(); ui(); }); ui(); return; }
       v.muted = !v.muted; if (v.paused) v.play();
       ui();
+    });
+  })();
+
+  // home film #2: muted loop, sound toggle
+  (function(){
+    var v = document.querySelector("#heroVideo2 video"), btn = document.getElementById("hvSound2");
+    if (!v || !btn) return;
+    function start(){ if (v.getAttribute("src")) return; v.src = v.getAttribute("data-src"); v.play().catch(function(){}); }
+    if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(en){ if (en[0].isIntersecting){ start(); io.disconnect(); } }, {rootMargin: "200px"}); io.observe(v); } else { setTimeout(start, 3000); }
+    btn.addEventListener("click", function(){
+      start(); v.muted = !v.muted; if (!v.muted) v.play();
+      btn.setAttribute("aria-pressed", v.muted ? "false" : "true");
+      btn.querySelector("span").textContent = v.muted ? "Sound on" : "Sound off";
     });
   })();
 
