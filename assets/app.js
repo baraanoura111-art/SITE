@@ -348,6 +348,115 @@ function OasisPDF(jsPDF, A, spec){
     });
   })();
 
+  // chat bot: answers from the site's own content, then hands off to WhatsApp
+  (function(){
+    var M = window.OASIS_MARKET || {psf:{}, build:{}};
+    var CL = [
+      {n:"Palmiera 1", k:["palmiera 1","palmiera1","p1"], u:"/clusters/palmiera-1/"},
+      {n:"Palmiera 2", k:["palmiera 2","palmiera2","p2"], u:"/clusters/palmiera-2/"},
+      {n:"Palmiera 3", k:["palmiera 3","palmiera3","p3"], u:"/clusters/palmiera-3/"},
+      {n:"Palmiera Collective", k:["collective"], u:"/clusters/palmiera-collective/"},
+      {n:"Mirage", k:["mirage"], u:"/clusters/mirage/"},
+      {n:"Lavita", k:["lavita","la vita"], u:"/clusters/lavita/"},
+      {n:"Marèva 2", k:["mareva 2","marèva 2","mareva2"], u:"/clusters/mareva-2/"},
+      {n:"Marèva", k:["mareva","marèva"], u:"/clusters/mareva/"},
+      {n:"Address Tierra", k:["tierra","address"], u:"/clusters/address-villas-tierra/"},
+      {n:"Palace Ostra", k:["ostra","palace"], u:"/clusters/palace-villas-ostra/"},
+      {n:"Valoria", k:["valoria"], u:"/next-launch-valoria/"}
+    ];
+    var fab, pan, log, inp, started = false, lastQ = "";
+    function A(h,t){ return '<a href="' + h + '">' + t + '</a>'; }
+    function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+    function add(html, me){
+      var d = document.createElement("div"); d.className = "cb-m" + (me ? " me" : "");
+      if (me) d.textContent = html; else d.innerHTML = html;
+      log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+    }
+    function chips(list){
+      var w = document.createElement("div"); w.className = "cb-ch";
+      list.forEach(function(c){
+        var b = document.createElement("button"); b.type = "button"; b.className = "cb-c"; b.textContent = c;
+        b.addEventListener("click", function(){ w.remove(); ask(c); }); w.appendChild(b);
+      });
+      log.appendChild(w); log.scrollTop = log.scrollHeight;
+    }
+    var MENU = ["Find a villa","Prices","Construction progress","Buying costs","Mortgage & yield","Buyer Guide","Talk to Baraa"];
+    function clusterInfo(c){
+      var p = M.psf && M.psf[c.n], b = M.build && M.build[c.n], o = "<b>" + c.n + "</b><br>";
+      if (p) o += "Average price: AED " + fmt(p) + " per sq ft.<br>";
+      if (b) o += "Construction: " + b.pct + "% (" + b.date + ").<br>";
+      return o + A(c.u, "Open the " + c.n + " page") + ". For current availability and the payment plan, ask Baraa.";
+    }
+    function lead(topic){
+      add("Leave your details and Baraa will reply on WhatsApp.");
+      askLead("Chat with Baraa", function(u){
+        saveLead("Chat bot", u.name, u.phone, "Role: " + u.role + " · Topic: " + (topic || lastQ || "general"));
+        add("Thank you " + u.name.split(" ")[0] + ". Opening WhatsApp now.");
+        wa("Hi Baraa, I'm " + u.name + " (" + u.role + "). I was chatting on your website about: " + (topic || lastQ || "The Oasis") + ".");
+      });
+    }
+    function answer(q){
+      var t = " " + q.toLowerCase().replace(/[^a-z0-9èé+ ]/g, " ").replace(/\s+/g, " ") + " ";
+      function has(){ for (var i = 0; i < arguments.length; i++) if (t.indexOf(arguments[i]) > -1) return true; return false; }
+      if (has("talk to baraa","whatsapp"," call","speak","agent","contact","human","broker","meet","viewing","book")) return lead(q), null;
+      for (var i = 0; i < CL.length; i++) for (var j = 0; j < CL[i].k.length; j++) if (t.indexOf(" " + CL[i].k[j]) > -1) return clusterInfo(CL[i]);
+      if (has("waitlist","next launch","new launch")) return "The next launch is Valoria. " + A("/next-launch-valoria/","See Valoria") + " and join the waitlist there.";
+      if (has("find a villa","find villa","villa finder","search","bedroom"," bed ","budget","available","availability"," unit")) return "Use the " + A("/tools/villa-finder/","Oasis Villa Finder") + " to filter by cluster, bedrooms and budget. For what's available today, ask Baraa.";
+      if (has("compare")) return A("/tools/compare-clusters/","Compare clusters") + " side by side, or " + A("/tools/compare-villas/","compare villas") + " one to one.";
+      if (has("construction","progress","handover","built","complete","when ready","delivery")){
+        var r = "Latest construction progress:<br>"; CL.forEach(function(c){ var b = M.build && M.build[c.n]; if (b) r += c.n + ": " + b.pct + "%<br>"; });
+        return r + "Source: Dubai REST app, updated monthly. " + A("/construction-update/","Construction updates");
+      }
+      if (has("fee","dld","commission","transfer","extra","additional","tax","vat","noc")) return "On top of the price: the DLD transfer fee, registration and trustee fees, agency commission, and the developer's NOC for resale units. Use the " + A("/tools/purchase-fee-calculator/","Purchase Fee Calculator") + " for the full breakdown.";
+      if (has("price","cost","how much","psf","per sq","sq ft","expensive","cheap")){
+        var o = "Average price per sq ft (Property Monitor):<br>"; CL.forEach(function(c){ var p = M.psf && M.psf[c.n]; if (p) o += c.n + ": AED " + fmt(p) + "<br>"; });
+        return o + "Exact prices depend on the unit. " + A("/tools/villa-finder/","Villa Finder") + " or ask Baraa for current listings.";
+      }
+      if (has("mortgage","loan","finance","bank","installment","instalment","down payment")) return "Estimate monthly payments with the " + A("/tools/mortgage-calculator/","Mortgage Calculator") + ". Payment plans differ by cluster and unit, so ask Baraa for the exact plan.";
+      if (has("payment plan")) return "Payment plans differ by cluster and unit. Ask Baraa for the exact plan on the villa you like.";
+      if (has(" rent","yield","roi","return","invest")) return "Estimate returns with the " + A("/tools/rental-yield-estimator/","Rental Yield Estimator") + ".";
+      if (has("document","passport","emirates id","visa needed","deposit")) return "You'll need your Emirates ID, passport and visa, a mortgage pre-approval if you're financing, and a security deposit cheque for 10% of the purchase price. " + A("/buyer-guide/","Full buying process in the Buyer Guide");
+      if (has("negotiat","discount","offer")) return "On resale, often yes. Emaar's off-plan prices are usually fixed, but resale deals leave room, especially with good market data behind the offer.";
+      if (has("guide","pdf","download","brochure","fact sheet","factsheet")) return "The " + A("/buyer-guide/","Oasis Buyer Guide") + " is a free 21-page PDF. Tap Download and enter your details.";
+      if (has("floor plan","floorplan","layout","style","design")) return "See every style and download floor plans on " + A("/style-and-floorplans/","Style & Floorplans") + ".";
+      if (has("school","nursery","education")) return "Yes, The Oasis is near reputable schools. " + A("/articles/","Read the schools guide in Articles") + ".";
+      if (has("location","where","airport","distance","connectivity","metro","downtown","drive")) return "The Oasis sits on Sheikh Zayed bin Hamdan Road (D54), close to Emirates Road (E611) and the planned extension of Al Khail Road (E44), about 18 minutes to Al Maktoum International Airport. " + A("/location/","See the location");
+      if (has("sell","valuation","list my","resale","my villa")) return "Selling a villa? Request a valuation on " + A("/sell-with-me/","Sell With Me") + ".";
+      if (has("service","business setup","residency","golden","renovat","snagging"," lease","manage")) return "After the deal: handover snagging, renovation, leasing and management, plus business setup and residency. " + A("/services/","See my services");
+      if (has("gallery","photo","picture","video","image")) return "Photos and the launch film are in the " + A("/gallery/","Gallery") + ".";
+      if (has("about","who are you","baraa")) return "Baraa Noura is The Oasis Specialist, a Dubai broker with AX CAPITAL Real Estate focused only on The Oasis by Emaar. " + A("/about/","About me");
+      if (has("cluster","community","oasis","amenit","lagoon")) return "Ten launched clusters, 4 to 7 bedroom villas and mansions from about 5,600 sq ft to over 34,000 sq ft. " + A("/clusters/","Browse the clusters");
+      if (/ (hi|hello|hey|salam|marhaba|start|menu) /.test(t)) return "Hello! I'm the Oasis assistant. What would you like to know?";
+      return "I don't have that one. Baraa can answer it directly.";
+    }
+    function ask(q){
+      q = q.trim(); if (!q) return; lastQ = q; add(q, true);
+      var r = answer(q); if (r === null) return;
+      setTimeout(function(){
+        add(r);
+        if (/I don't have that/.test(r)) chips(["Talk to Baraa"].concat(MENU.slice(0,4))); else chips(MENU);
+      }, 250);
+    }
+    function open(){
+      fab.hidden = true; pan.hidden = false;
+      if (!started){ started = true; add("Welcome to The Oasis by Emaar. I can answer questions about clusters, prices, construction, costs and the buying process."); chips(MENU); if (window.gtag) try { gtag("event","chat_open"); } catch(e){} }
+      setTimeout(function(){ inp.focus({preventScroll:true}); }, 50);
+    }
+    function close(){ pan.hidden = true; fab.hidden = false; }
+    function init(){
+      fab = document.createElement("button"); fab.type = "button"; fab.className = "cb-fab"; fab.setAttribute("aria-label","Open chat");
+      fab.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9.5L5 20v-3.5H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>Chat</span>';
+      pan = document.createElement("div"); pan.className = "cb-pan"; pan.hidden = true; pan.setAttribute("role","dialog"); pan.setAttribute("aria-label","Oasis assistant");
+      pan.innerHTML = '<div class="cb-hd"><div><b>Oasis Assistant</b><span>The Oasis Specialist</span></div><button type="button" class="cb-x" aria-label="Close chat">×</button></div><div class="cb-log" aria-live="polite"></div><form class="cb-f"><input type="text" placeholder="Ask about The Oasis" aria-label="Your question" autocomplete="off" enterkeyhint="send"><button type="submit">Send</button></form>';
+      document.body.appendChild(fab); document.body.appendChild(pan);
+      log = pan.querySelector(".cb-log"); inp = pan.querySelector("input");
+      fab.addEventListener("click", open); pan.querySelector(".cb-x").addEventListener("click", close);
+      pan.querySelector("form").addEventListener("submit", function(e){ e.preventDefault(); var v = inp.value; inp.value = ""; ask(v); });
+      document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !pan.hidden) close(); });
+    }
+    init();
+  })();
+
   // floor plans
   var FP = [
     {id:"p1", name:"Palmiera 1", bua:"5,843–8,689", note:"265 villas", types:[["4","Chamfered"],["4","Classical"],["4","Contemporary"],["5","Chamfered"],["5","Classical Type 1"],["5","Classical Type 2"],["5","Contemporary"]]},
