@@ -505,6 +505,20 @@ function OasisPDF(jsPDF, A, spec){
     }
   })();
 
+  // market tracker: home mini section
+  (function(){
+    var st = document.getElementById("tmStats"); if (!st) return;
+    fetch("/data/sales.json", {cache: "no-cache"}).then(function(r){ return r.json(); }).then(function(D){
+      var a = D.updated.split("-").map(Number), d = new Date(a[0], a[1] - 7, a[2]);
+      var c = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+      var r = D.s.filter(function(x){ return x[0] >= c; }); if (!r.length) return;
+      var p = r.map(function(x){ return x[2]; }).sort(function(x,y){ return x - y; }), n = p.length, m = n % 2 ? p[(n-1)/2] : (p[n/2-1] + p[n/2]) / 2;
+      var pr = 0, b = 0, hi = p[n-1]; r.forEach(function(x){ pr += x[2]; b += x[4]; });
+      function mil(v){ return "AED " + (v / 1e6).toFixed(v >= 5e7 ? 1 : 2) + "M"; }
+      st.innerHTML = [[n, "Sales"], [mil(m), "Median price"], [String(Math.round(pr / b)).replace(/\B(?=(\d{3})+(?!\d))/g, ","), "AED per sq ft"], [mil(hi), "Highest sale"]].map(function(x){ return '<div class="tk-s"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>'; }).join("");
+    }).catch(function(){});
+  })();
+
   // floor plans
   var FP = [
     {id:"p1", name:"Palmiera 1", bua:"5,843–8,689", note:"265 villas", types:[["4","Chamfered"],["4","Classical"],["4","Contemporary"],["5","Chamfered"],["5","Classical Type 1"],["5","Classical Type 2"],["5","Contemporary"]]},
@@ -1071,7 +1085,7 @@ function OasisPDF(jsPDF, A, spec){
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
   (function(){ var hh = decodeURIComponent(location.hash.replace("#","")); if (hh && PATHS[hh] && PATHS[hh] !== location.pathname && !document.getElementById(hh)) location.replace(PATHS[hh]); })();
   var PAGES = [
-    {id:"home", title:"Home", s:["factsheet","explore","links","contact"]},
+    {id:"home", title:"Home", s:["factsheet","explore","trackermini","contact"]},
     {id:"overview", title:"Overview", s:["overview","location","factsheet"]},
     {id:"location", title:"Location", s:["location"], parent:"overview"},
     {id:"clusters", title:"Clusters", s:["clusters"]},

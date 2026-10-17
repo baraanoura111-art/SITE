@@ -727,10 +727,10 @@ footer .social{gap:14px}
 #snagging .sn-wrap p{line-height:1.7;margin:0 0 16px}#snagging .head p{margin:0 auto}
 
 /* market tracker */
-#tracker .sn-cta{display:flex;justify-content:center;margin:30px 0 8px}
+#tracker .sn-cta,#trackermini .sn-cta{display:flex;justify-content:center;margin:30px 0 8px}
 #tracker .sn-book{display:inline-flex;align-items:center;justify-content:center}
 #tracker .note{text-align:center;margin-top:20px}
-#tracker .tk-wrap{max-width:900px}
+#tracker .tk-wrap,#trackermini .tk-wrap{max-width:900px}
 .tk-ctl{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:center;margin:22px 0 26px}
 .tk-per{display:flex}
 .tk-b{min-height:44px;padding:0 16px;border:1px solid var(--line);background:transparent;color:var(--ink);font:300 14px var(--body);letter-spacing:.04em;cursor:pointer;margin-left:-1px}
