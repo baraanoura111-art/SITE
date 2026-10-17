@@ -716,6 +716,16 @@ footer .social{gap:14px}
 .cb-f{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
 .cb-f input{flex:1;min-width:0;min-height:44px;padding:0 12px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font:300 16px var(--body)}
 .cb-f button{min-height:44px;padding:0 16px;border:0;background:var(--brass);color:var(--bg);font:400 14px var(--body);cursor:pointer}@media (max-width:480px){.cb-pan{right:8px;left:8px;width:auto;max-width:none;bottom:calc(env(safe-area-inset-bottom,0px) + 66px);height:calc(100dvh - 150px)}}
+
+/* snagging guide */
+#snagging .sn-wrap{max-width:820px}
+#snagging .sn-cta,#snagging .sn-end{display:flex;justify-content:center;margin:26px 0 8px}
+#snagging .sn-end{flex-direction:column;align-items:center;text-align:center;gap:16px;margin-top:44px;padding:34px 20px;border:1px solid var(--line);background:var(--surface)}
+#snagging .sn-end p{margin:0}
+#snagging .sn-book{display:inline-flex;align-items:center;justify-content:center;gap:10px}
+#snagging .sn-book svg{width:20px;height:20px;flex:none}
+#snagging .sn-h{font:300 clamp(22px,5.2vw,30px)/1.2 var(--display);margin:46px 0 14px;letter-spacing:.01em}
+#snagging .sn-wrap p{line-height:1.7;margin:0 0 16px}#snagging .head p{margin:0 auto}
 .hv-cap{margin:12px 0 0;text-align:center;font:300 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--mute,#9a958b)}
 /* location map */
 .map-wrap{position:relative;width:100%;max-width:960px;margin:32px auto 0;aspect-ratio:16/10;border:1px solid var(--line);overflow:hidden;background:var(--surface)}
