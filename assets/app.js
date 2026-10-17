@@ -425,6 +425,7 @@ function OasisPDF(jsPDF, A, spec){
       if (has("sell","valuation","list my","resale","my villa")) return "Selling a villa? Request a valuation on " + A("/sell-with-me/","Sell With Me") + ".";
       if (has("service","business setup","residency","golden","renovat","snagging"," lease","manage")) return "After the deal: handover snagging, renovation, leasing and management, plus business setup and residency. " + A("/services/","See my services");
       if (has("gallery","photo","picture","video","image")) return "Photos and the launch film are in the " + A("/gallery/","Gallery") + ".";
+      if (has("youtube","instagram","social","follow","channel")) return "Follow Baraa on " + A("https://www.youtube.com/@oasisbybaraa","YouTube") + ", " + A("https://www.instagram.com/baraa.oasis","Instagram") + " and the " + A("https://whatsapp.com/channel/0029Vb97PL1GehEEMwQ4053S","WhatsApp Channel") + ".";
       if (has("about","who are you","baraa")) return "Baraa Noura is The Oasis Specialist, a Dubai broker with AX CAPITAL Real Estate focused only on The Oasis by Emaar. " + A("/about/","About me");
       if (has("cluster","community","oasis","amenit","lagoon")) return "Ten launched clusters, 4 to 7 bedroom villas and mansions from about 5,600 sq ft to over 34,000 sq ft. " + A("/clusters/","Browse the clusters");
       if (/ (hi|hello|hey|salam|marhaba|start|menu) /.test(t)) return "Hello! I'm the Oasis assistant. What would you like to know?";
