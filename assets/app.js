@@ -407,6 +407,7 @@ function OasisPDF(jsPDF, A, spec){
         var r = "Latest construction progress:<br>"; CL.forEach(function(c){ var b = M.build && M.build[c.n]; if (b) r += c.n + ": " + b.pct + "%<br>"; });
         return r + "Source: Dubai REST app, updated monthly. " + A("/construction-update/","Construction updates");
       }
+      if (has("sold","sales","transaction","market","trend","recent sale","last sold","sold for")) return "See what villas have actually sold for, by cluster and month, in the " + A("/tools/market-tracker/","Market Tracker") + ". Data comes from Dubai Land Department records.";
       if (has("fee","dld","commission","transfer","extra","additional","tax","vat","noc")) return "On top of the price: the DLD transfer fee, registration and trustee fees, agency commission, and the developer's NOC for resale units. Use the " + A("/tools/purchase-fee-calculator/","Purchase Fee Calculator") + " for the full breakdown.";
       if (has("price","cost","how much","psf","per sq","sq ft","expensive","cheap")){
         var o = "Average price per sq ft (Property Monitor):<br>"; CL.forEach(function(c){ var p = M.psf && M.psf[c.n]; if (p) o += c.n + ": AED " + fmt(p) + "<br>"; });
@@ -457,6 +458,55 @@ function OasisPDF(jsPDF, A, spec){
       document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !pan.hidden) close(); });
     }
     init();
+  })();
+
+  // market tracker
+  (function(){
+    var root = document.getElementById("tracker");
+    if (!root) return;
+    fetch("/data/sales.json", {cache: "no-cache"}).then(function(r){ return r.json(); }).then(run).catch(function(){ var e = document.getElementById("tkStats"); if (e) e.innerHTML = '<p class="tk-empty" style="grid-column:1/-1">The sales data could not be loaded. Please refresh.</p>'; });
+    function run(D){
+    var $q = function(id){ return document.getElementById(id); };
+    var per = 6, shown = 10, MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var clSel = $q("tkCl"); clSel.innerHTML = '<option value="">All clusters</option>' + D.c.map(function(n,i){ return '<option value="' + i + '">' + n + '</option>'; }).join("");
+    function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+    function mil(n){ return "AED " + (n / 1e6).toFixed(n >= 5e7 ? 1 : 2) + "M"; }
+    function dstr(s){ var p = s.split("-"); return +p[2] + " " + MON[+p[1] - 1] + " " + p[0].slice(2); }
+    function cutoff(){ if (!per) return ""; var a = D.updated.split("-").map(Number), d = new Date(a[0], a[1] - 1 - per, a[2]); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+    function rows(){
+      var c = cutoff(), cl = clSel.value, bd = $q("tkBd").value;
+      return D.s.filter(function(r){ return (!c || r[0] >= c) && (cl === "" || r[1] === +cl) && (!bd || r[5] === +bd); });
+    }
+    function med(a){ a = a.slice().sort(function(x,y){ return x - y; }); var n = a.length; return n % 2 ? a[(n-1)/2] : (a[n/2-1] + a[n/2]) / 2; }
+    function wpsf(r){ var p = 0, b = 0; r.forEach(function(x){ p += x[2]; b += x[4]; }); return b ? p / b : 0; }
+    function draw(){
+      var r = rows(), st = $q("tkStats");
+      if (!r.length){
+        st.innerHTML = '<p class="tk-empty" style="grid-column:1/-1">No sales match these filters.</p>';
+        $q("tkCluster").innerHTML = ""; $q("tkChart").innerHTML = ""; $q("tkList").innerHTML = ""; $q("tkMore").hidden = true; return;
+      }
+      var hi = Math.max.apply(null, r.map(function(x){ return x[2]; }));
+      st.innerHTML = [[r.length, "Sales"], [mil(med(r.map(function(x){ return x[2]; }))), "Median price"], [fmt(wpsf(r)), "AED per sq ft"], [mil(hi), "Highest sale"]].map(function(x){ return '<div class="tk-s"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>'; }).join("");
+      var g = {}; r.forEach(function(x){ (g[x[1]] = g[x[1]] || []).push(x); });
+      var ks = Object.keys(g).sort(function(a,b){ return g[b].length - g[a].length; });
+      $q("tkCluster").innerHTML = '<thead><tr><th>Cluster</th><th class="n">Sales</th><th class="n">Avg price</th><th class="n">AED / sq ft</th></tr></thead><tbody>' + ks.map(function(k){
+        var a = g[k], avg = a.reduce(function(s,x){ return s + x[2]; }, 0) / a.length;
+        return '<tr><td>' + D.c[k] + '</td><td class="n">' + a.length + '</td><td class="n">' + mil(avg) + '</td><td class="n">' + fmt(wpsf(a)) + '</td></tr>'; }).join("") + '</tbody>';
+      var m = {}; r.forEach(function(x){ var k = x[0].slice(0,7); (m[k] = m[k] || []).push(x); });
+      var mk = Object.keys(m).sort(), mx = Math.max.apply(null, mk.map(function(k){ return m[k].length; }));
+      $q("tkChart").innerHTML = mk.map(function(k){ var a = m[k], mo = MON[+k.slice(5) - 1];
+        return '<div class="tk-col"><span class="tk-v">' + a.length + '</span><div class="tk-bar" style="height:' + Math.max(2, Math.round(a.length / mx * 130)) + 'px"></div><span class="tk-m">' + mo + " " + k.slice(2,4) + '</span><span class="tk-p">' + fmt(wpsf(a)) + '</span></div>'; }).join("");
+      var l = r.slice(0, shown);
+      $q("tkList").innerHTML = '<thead><tr><th>Date</th><th>Cluster</th><th class="n">Beds</th><th class="n">Price</th><th class="n">AED / sq ft</th></tr></thead><tbody>' + l.map(function(x){
+        return '<tr><td>' + dstr(x[0]) + '</td><td>' + D.c[x[1]] + '</td><td class="n">' + x[5] + '</td><td class="n">' + fmt(x[2]) + '</td><td class="n">' + fmt(x[2] / x[4]) + '</td></tr>'; }).join("") + '</tbody>';
+      $q("tkMore").hidden = r.length <= shown;
+    }
+    $q("tkNote").innerHTML = "Source: " + D.source + ". Registered off-plan villa sales; figures can differ slightly from the DLD website. AED per sq ft is calculated on built-up area (the small numbers under each month in the chart are the monthly average). Last sale recorded " + dstr(D.last) + ". Shows the last 6 months only.";
+    $q("tkPer").addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".tk-b"); if (!b) return; per = +b.getAttribute("data-m"); shown = 10; [].forEach.call(this.children, function(c){ c.classList.toggle("on", c === b); }); draw(); });
+    clSel.addEventListener("change", function(){ shown = 10; draw(); }); $q("tkBd").addEventListener("change", function(){ shown = 10; draw(); });
+    $q("tkMore").addEventListener("click", function(){ shown += 10; draw(); });
+    draw();
+    }
   })();
 
   // floor plans
@@ -1020,7 +1070,7 @@ function OasisPDF(jsPDF, A, spec){
   })();
 
   // page router: one topic per screen (articles and clusters also have their own URLs)
-  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "snagging": "/tools/snagging-guide/", "mortgage": "/tools/mortgage-calculator/", "factsheet": "/buyer-guide/", "construction": "/construction-update/", "privacy": "/privacy-policy/", "overview": "/overview/", "location": "/location/", "styles": "/style-and-floorplans/", "gallery": "/gallery/", "about": "/about/", "services": "/services/", "sell": "/sell-with-me/", "faq": "/faq/", "contact": "/contact/", "comparev": "/tools/compare-villas/", "nextlaunch": "/next-launch-valoria/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "lp-valoria": "/clusters/valoria/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "floorplans": "/style-and-floorplans/", "explore": "/", "links": "/", "home": "/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/"};
+  var PATHS = {"top": "/", "articles": "/articles/", "clusters": "/clusters/", "calculators": "/tools/", "finder": "/tools/villa-finder/", "compare": "/tools/compare-clusters/", "fees": "/tools/purchase-fee-calculator/", "yield": "/tools/rental-yield-estimator/", "tracker": "/tools/market-tracker/", "snagging": "/tools/snagging-guide/", "mortgage": "/tools/mortgage-calculator/", "factsheet": "/buyer-guide/", "construction": "/construction-update/", "privacy": "/privacy-policy/", "overview": "/overview/", "location": "/location/", "styles": "/style-and-floorplans/", "gallery": "/gallery/", "about": "/about/", "services": "/services/", "sell": "/sell-with-me/", "faq": "/faq/", "contact": "/contact/", "comparev": "/tools/compare-villas/", "nextlaunch": "/next-launch-valoria/", "lp-palmiera-1": "/clusters/palmiera-1/", "lp-palmiera-2": "/clusters/palmiera-2/", "lp-palmiera-3": "/clusters/palmiera-3/", "lp-palmiera-collective": "/clusters/palmiera-collective/", "lp-mirage": "/clusters/mirage/", "lp-lavita": "/clusters/lavita/", "lp-mareva": "/clusters/mareva/", "lp-mareva-2": "/clusters/mareva-2/", "lp-address-villas-tierra": "/clusters/address-villas-tierra/", "lp-palace-villas-ostra": "/clusters/palace-villas-ostra/", "lp-valoria": "/clusters/valoria/", "cl-palmiera": "/clusters/palmiera-1/", "cl-collective": "/clusters/palmiera-collective/", "cl-mirage": "/clusters/mirage/", "cl-lavita": "/clusters/lavita/", "cl-mareva": "/clusters/mareva/", "cl-tierra": "/clusters/address-villas-tierra/", "cl-ostra": "/clusters/palace-villas-ostra/", "floorplans": "/style-and-floorplans/", "explore": "/", "links": "/", "home": "/", "art-clusters": "/articles/why-the-oasis/", "art-resale": "/articles/palmiera-villa-resold-32-percent/", "art-invest": "/articles/is-the-oasis-a-good-investment/", "art-buying": "/articles/how-buying-a-villa-in-the-oasis-works/", "art-costs": "/articles/cost-of-buying-a-villa-in-the-oasis/", "art-service": "/articles/service-charges-in-the-oasis/", "art-schools": "/articles/schools-near-the-oasis/", "art-golf": "/articles/golf-courses-near-the-oasis/", "art-polo": "/articles/polo-and-equestrian-clubs-near-the-oasis/"};
   var ROUTE = (document.querySelector('meta[name="oasis-route"]') || {}).content || "";
   function U(id){ return PATHS[id] || (location.pathname === "/" ? "#" + id : "/#" + id); }
   (function(){ var hh = decodeURIComponent(location.hash.replace("#","")); if (hh && PATHS[hh] && PATHS[hh] !== location.pathname && !document.getElementById(hh)) location.replace(PATHS[hh]); })();
@@ -1041,6 +1091,7 @@ function OasisPDF(jsPDF, A, spec){
     {id:"fees", title:"Purchase Fee Calculator", s:["fees"], parent:"calculators"},
     {id:"yield", title:"Rental Yield Estimator", s:["yield"], parent:"calculators"},
     {id:"mortgage", title:"Mortgage Calculator", s:["mortgage"], parent:"calculators"},
+    {id:"tracker", title:"Market Tracker", s:["tracker"], parent:"calculators"},
     {id:"snagging", title:"Snagging Guide", s:["snagging"], parent:"calculators"},
     {id:"articles", title:"Articles", s:["articles"]},
     {id:"art-clusters", title:"Why The Oasis? Why I Chose To Specialize Here", s:["art-clusters"], parent:"articles"},
