@@ -380,7 +380,7 @@ function OasisPDF(jsPDF, A, spec){
       });
       log.appendChild(w); log.scrollTop = log.scrollHeight;
     }
-    var MENU = ["Find a villa","Prices","Construction progress","Buying costs","Mortgage & yield","Buyer Guide","Talk to Baraa"];
+    var MENU = ["Find a villa","Prices","Construction progress","Buying costs","Mortgage & yield","Market Tracker","Snagging","Buyer Guide","Talk to Baraa"];
     function clusterInfo(c){
       var p = M.psf && M.psf[c.n], b = M.build && M.build[c.n], o = "<b>" + c.n + "</b><br>";
       if (p) o += "Average price: AED " + fmt(p) + " per sq ft.<br>";
@@ -407,7 +407,7 @@ function OasisPDF(jsPDF, A, spec){
         var r = "Latest construction progress:<br>"; CL.forEach(function(c){ var b = M.build && M.build[c.n]; if (b) r += c.n + ": " + b.pct + "%<br>"; });
         return r + "Source: Dubai REST app, updated monthly. " + A("/construction-update/","Construction updates");
       }
-      if (has("sold","sales","transaction","market","trend","recent sale","last sold","sold for")) return "See what villas have actually sold for, by cluster and month, in the " + A("/tools/market-tracker/","Market Tracker") + ". Data comes from Dubai Land Department records.";
+      if (has("sold","sales","transaction","market","trend","recent sale","last sold","sold for")) return "See what villas have actually sold for, by cluster over the past 6 months, in the " + A("/tools/market-tracker/","Market Tracker") + ". Data comes from Dubai Land Department records, updated weekly.";
       if (has("fee","dld","commission","transfer","extra","additional","tax","vat","noc")) return "On top of the price: the DLD transfer fee, registration and trustee fees, agency commission, and the developer's NOC for resale units. Use the " + A("/tools/purchase-fee-calculator/","Purchase Fee Calculator") + " for the full breakdown.";
       if (has("price","cost","how much","psf","per sq","sq ft","expensive","cheap")){
         var o = "Average price per sq ft (Property Monitor):<br>"; CL.forEach(function(c){ var p = M.psf && M.psf[c.n]; if (p) o += c.n + ": AED " + fmt(p) + "<br>"; });
@@ -442,7 +442,7 @@ function OasisPDF(jsPDF, A, spec){
     }
     function open(){
       fab.hidden = true; pan.hidden = false;
-      if (!started){ started = true; add("Welcome to The Oasis by Emaar. I can answer questions about clusters, prices, construction, costs and the buying process."); chips(MENU); if (window.gtag) try { gtag("event","chat_open"); } catch(e){} }
+      if (!started){ started = true; add("Welcome! I am your Oasis Assistant. I can answer questions about clusters, floorplans, construction, costs and the buying process."); chips(MENU); if (window.gtag) try { gtag("event","chat_open"); } catch(e){} }
       setTimeout(function(){ inp.focus({preventScroll:true}); }, 50);
     }
     function close(){ pan.hidden = true; fab.hidden = false; }
@@ -483,7 +483,7 @@ function OasisPDF(jsPDF, A, spec){
       var r = rows(), st = $q("tkStats");
       if (!r.length){
         st.innerHTML = '<p class="tk-empty" style="grid-column:1/-1">No sales match these filters.</p>';
-        $q("tkCluster").innerHTML = ""; $q("tkChart").innerHTML = ""; $q("tkList").innerHTML = ""; $q("tkMore").hidden = true; return;
+        $q("tkCluster").innerHTML = ""; $q("tkList").innerHTML = ""; $q("tkMore").hidden = true; return;
       }
       var hi = Math.max.apply(null, r.map(function(x){ return x[2]; }));
       st.innerHTML = [[r.length, "Sales"], [mil(med(r.map(function(x){ return x[2]; }))), "Median price"], [fmt(wpsf(r)), "AED per sq ft"], [mil(hi), "Highest sale"]].map(function(x){ return '<div class="tk-s"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>'; }).join("");
@@ -492,16 +492,12 @@ function OasisPDF(jsPDF, A, spec){
       $q("tkCluster").innerHTML = '<thead><tr><th>Cluster</th><th class="n">Sales</th><th class="n">Avg price</th><th class="n">AED / sq ft</th></tr></thead><tbody>' + ks.map(function(k){
         var a = g[k], avg = a.reduce(function(s,x){ return s + x[2]; }, 0) / a.length;
         return '<tr><td>' + D.c[k] + '</td><td class="n">' + a.length + '</td><td class="n">' + mil(avg) + '</td><td class="n">' + fmt(wpsf(a)) + '</td></tr>'; }).join("") + '</tbody>';
-      var m = {}; r.forEach(function(x){ var k = x[0].slice(0,7); (m[k] = m[k] || []).push(x); });
-      var mk = Object.keys(m).sort(), mx = Math.max.apply(null, mk.map(function(k){ return m[k].length; }));
-      $q("tkChart").innerHTML = mk.map(function(k){ var a = m[k], mo = MON[+k.slice(5) - 1];
-        return '<div class="tk-col"><span class="tk-v">' + a.length + '</span><div class="tk-bar" style="height:' + Math.max(2, Math.round(a.length / mx * 130)) + 'px"></div><span class="tk-m">' + mo + " " + k.slice(2,4) + '</span><span class="tk-p">' + fmt(wpsf(a)) + '</span></div>'; }).join("");
       var l = r.slice(0, shown);
       $q("tkList").innerHTML = '<thead><tr><th>Date</th><th>Cluster</th><th class="n">Beds</th><th class="n">Price</th><th class="n">AED / sq ft</th></tr></thead><tbody>' + l.map(function(x){
         return '<tr><td>' + dstr(x[0]) + '</td><td>' + D.c[x[1]] + '</td><td class="n">' + x[5] + '</td><td class="n">' + fmt(x[2]) + '</td><td class="n">' + fmt(x[2] / x[4]) + '</td></tr>'; }).join("") + '</tbody>';
       $q("tkMore").hidden = r.length <= shown;
     }
-    $q("tkNote").innerHTML = "Source: " + D.source + ". Registered off-plan villa sales; figures can differ slightly from the DLD website. AED per sq ft is calculated on built-up area (the small numbers under each month in the chart are the monthly average). Last sale recorded " + dstr(D.last) + ". Shows the last 6 months only.";
+    $q("tkNote").textContent = "Source: " + D.source + ". Updated Weekly. Past 6 months.";
     $q("tkPer").addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".tk-b"); if (!b) return; per = +b.getAttribute("data-m"); shown = 10; [].forEach.call(this.children, function(c){ c.classList.toggle("on", c === b); }); draw(); });
     clSel.addEventListener("change", function(){ shown = 10; draw(); }); $q("tkBd").addEventListener("change", function(){ shown = 10; draw(); });
     $q("tkMore").addEventListener("click", function(){ shown += 10; draw(); });

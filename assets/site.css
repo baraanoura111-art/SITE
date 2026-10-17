@@ -727,6 +727,9 @@ footer .social{gap:14px}
 #snagging .sn-wrap p{line-height:1.7;margin:0 0 16px}#snagging .head p{margin:0 auto}
 
 /* market tracker */
+#tracker .sn-cta{display:flex;justify-content:center;margin:30px 0 8px}
+#tracker .sn-book{display:inline-flex;align-items:center;justify-content:center}
+#tracker .note{text-align:center;margin-top:20px}
 #tracker .tk-wrap{max-width:900px}
 .tk-ctl{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:center;margin:22px 0 26px}
 .tk-per{display:flex}
@@ -734,10 +737,10 @@ footer .social{gap:14px}
 .tk-b.on{background:var(--brass);border-color:var(--brass);color:var(--bg)}
 .tk-sel label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
 .tk-sel select{min-height:44px;min-width:130px;padding:0 10px;background:var(--surface);color:var(--ink);border:1px solid var(--line);font:300 16px var(--body)}
-.tk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.tk-s{padding:18px 14px;border:1px solid var(--line);background:var(--surface);text-align:center}
-.tk-s b{display:block;font:300 clamp(22px,5.4vw,30px)/1.1 var(--display);color:var(--ink)}
-.tk-s span{display:block;margin-top:8px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tk-s{padding:11px 8px;border:1px solid var(--line);background:var(--surface);text-align:center}
+.tk-s b{display:block;font:300 clamp(16px,4.3vw,22px)/1.1 var(--display);color:var(--ink)}
+.tk-s span{display:block;margin-top:5px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .tk-h{font:300 clamp(22px,5.2vw,28px)/1.2 var(--display);margin:42px 0 12px}
 .tk-t{width:100%;border-collapse:collapse}
 .tk-t th,.tk-t td{padding:11px 10px;text-align:left;border-bottom:1px solid var(--line);font-size:15px;white-space:nowrap}
