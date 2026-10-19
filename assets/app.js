@@ -348,6 +348,25 @@ function OasisPDF(jsPDF, A, spec){
     });
   })();
 
+  // gallery film: starts when the page opens, with sound where the browser allows it (otherwise muted + "Sound on")
+  (function(){
+    var v = document.querySelector(".gal-video-m video"), b = document.getElementById("gvSound");
+    if (!v || !b) return;
+    var started = false;
+    function ui(){ b.hidden = !v.muted; }
+    function go(){
+      if (started) return; started = true;
+      v.muted = false;
+      var p = v.play();
+      if (p && p.catch) p.catch(function(){ v.muted = true; var q = v.play(); if (q && q.catch) q.catch(function(){}); ui(); });
+    }
+    function unmute(){ if (started && v.muted) { v.muted = false; if (v.paused) v.play().catch(function(){}); } }
+    ["pointerdown","keydown","touchend"].forEach(function(t){ document.addEventListener(t, unmute, {once:true, passive:true}); });
+    b.addEventListener("click", function(){ v.muted = false; if (v.paused) v.play().catch(function(){}); });
+    v.addEventListener("volumechange", ui);
+    if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(en){ if (en[0].isIntersecting){ go(); io.disconnect(); } }, {threshold: .3}); io.observe(v); } else { go(); }
+  })();
+
   // chat bot: answers from the site's own content, then hands off to WhatsApp
   (function(){
     var M = window.OASIS_MARKET || {psf:{}, build:{}};
