@@ -1436,7 +1436,7 @@ form .btn-portal{justify-self:center !important;grid-column:1 / -1}form .hint{gr
 .ht-l .about-links .al{white-space:nowrap;padding:0 9px;font-size:12px;gap:5px;min-height:38px}
 .ht-l .about-links .al svg{width:15px;height:15px}
 .ht-r{display:flex}
-.ht-r img{display:block;width:100%;height:100%;object-fit:cover;object-position:60% 40%;border:1px solid var(--line)}@media (max-width:900px){.hero-top{grid-template-columns:1fr;gap:28px}.ht-r img{height:auto;aspect-ratio:4/5;max-width:420px;margin:0 auto}.ht-l .hero-ctas{flex-wrap:wrap}.ht-l .about-links{flex-wrap:wrap}}
+.ht-r img{display:block;width:100%;height:100%;object-fit:cover;object-position:60% 40%;border:1px solid var(--line)}@media (max-width:900px){.hero-top{display:flex;flex-direction:column;gap:18px}.ht-l{display:contents}.ht-l .logo-mark{order:1}.ht-l .lede{order:2;margin:0 auto !important}.ht-r{order:3}.ht-l .hm-t{order:4;margin-top:6px;width:100%}.ht-l .hero-ctas{order:5;flex-wrap:wrap;width:100%;margin-top:6px}.ht-l .hm-soc{order:6;margin-top:10px !important}.ht-l .about-links{flex-wrap:wrap}.ht-r img{height:auto;aspect-ratio:5/4;width:100%;max-width:560px;margin:0 auto;object-position:62% 30%}}
 .hero-video.tk-box{aspect-ratio:auto !important;background:var(--surface);display:flex;align-items:center;justify-content:center;text-align:center}
 .tk-box .tkb-in{width:100%;padding:34px 32px 36px}
 .tk-box .tk-ico{display:block;width:44px;height:44px;margin:0 auto 12px;color:var(--brass)}
@@ -1446,6 +1446,11 @@ form .btn-portal{justify-self:center !important;grid-column:1 / -1}form .hint{gr
 .tk-box .tk-stats{margin:0 auto}
 .tk-box .sn-cta{display:flex;justify-content:center;margin:18px 0 0 !important}@media (max-width:480px){.tk-box .tkb-in{padding:26px 16px 28px}.tk-box .head h2{font-size:24px}}
 .btn,.al,.cb-fab{border-radius:12px !important}
+/* rounded controls site-wide */
+.act,.actbar .act,.menu .soc,.menu-foot .soc,.menu-btn,.hv-sound,.car-btn,.wc-x,.wc-later,.cb-x,.cb-f button,.chip,.tk-b,.map-btn,.map-btn a,select,textarea,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=hidden]){border-radius:12px !important}
+/* orphan words: nicer line breaks */
+p,li,dd,dt,summary,figcaption,blockquote,td,.note,.lede,.fp-name,.hl-name,.lp-rel-n,.f-aff{text-wrap:pretty}
+h1,h2,h3,h4,.btn,.cp-src,.cp-txt{text-wrap:balance}h1.pg-h{text-wrap:balance}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}
