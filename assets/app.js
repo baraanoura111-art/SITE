@@ -1156,7 +1156,7 @@ function OasisPDF(jsPDF, A, spec){
   var allSecs = document.querySelectorAll("main > section.block");
   function pageOf(sec){ for (var q = 0; q < PAGES.length; q++){ if (PAGES[q].id === sec) return q; } for (var i = 0; i < PAGES.length; i++) if (PAGES[i].s.indexOf(sec) > -1) return i; return 0; }
   function route(){
-    (function(){ var fsx = $("factsheet"), hh = decodeURIComponent(location.hash.replace("#","")) || ROUTE; if (!fsx) return; if ((!hh || hh === "top" || hh === "home") && $("explore")) $("explore").before(fsx); else if ($("location")) $("location").after(fsx); })();
+    (function(){ var fsx = $("factsheet"), hh = decodeURIComponent(location.hash.replace("#","")) || ROUTE; if (!fsx) return; if ((!hh || hh === "top" || hh === "home") && $("explore")) $("explore").after(fsx); else if ($("location")) $("location").after(fsx); })();
     var h = decodeURIComponent(location.hash.replace("#","")) || ROUTE, idx = 0, target = null;
     if (h && h !== "top"){ var el = document.getElementById(h); if (el){ var sec = el.closest("section.block"); if (sec){ idx = pageOf(sec.id); target = el; } } }
     var pg = PAGES[idx];
