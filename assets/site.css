@@ -1451,6 +1451,25 @@ form .btn-portal{justify-self:center !important;grid-column:1 / -1}form .hint{gr
 /* orphan words: nicer line breaks */
 p,li,dd,dt,summary,figcaption,blockquote,td,.note,.lede,.fp-name,.hl-name,.lp-rel-n,.f-aff{text-wrap:pretty}
 h1,h2,h3,h4,.btn,.cp-src,.cp-txt{text-wrap:balance}h1.pg-h{text-wrap:balance}
+.ab-hero{padding:56px 0 40px}.ab-title{font-size:clamp(28px,3.4vw,36px);margin:0 0 14px;text-align:left;color:var(--brass)}.ab-hero .hm-t p{font-size:15px}.ab-hero .hero-top{grid-template-columns:1fr 440px}.ab-hero .ht-l .hm-t{margin-top:22px}.ab-hero .hm-soc{margin-top:18px !important}.ab-hero .ht-l{justify-content:space-between}.ab-hero .ht-l .hm-t{margin-top:0}.ab-hero .hm-t p{font-size:17px !important;line-height:1.75 !important;margin-bottom:14px !important}.ab-hero .hm-t{margin-top:8px}.ab-hero .ab-title{margin-bottom:18px}.ab-hero .ht-r img{object-position:50% 30% !important}.ab-hero .ht-r img{object-position:50% 40% !important}.ab-hero .hero-top{grid-template-columns:1fr 560px;gap:40px;align-items:center}
+.ab-hero .ht-r{flex-direction:column;align-items:center}
+.ab-hero .ht-r img{height:auto !important;width:100%;max-width:440px;aspect-ratio:4/5;object-fit:cover}
+.ab-hero .ht-r .hm-soc{margin:18px 0 0 !important;padding:16px 0 0 !important;border-top:1px solid var(--line);width:100%;text-align:center}
+.ab-hero .ht-r .hm-soc h3{font-size:16px !important;margin:0 0 10px !important}
+.ab-hero .ht-r .about-links{justify-content:center;flex-wrap:nowrap;gap:6px}
+.ab-hero .ht-r .about-links .al{white-space:nowrap;padding:0 9px;font-size:12px;gap:5px;min-height:38px}
+.ab-hero .ht-r .about-links .al svg{width:15px;height:15px}
+.ab-hero .ht-l{justify-content:center}@media(max-width:900px){.ab-hero .hero-top{display:flex;flex-direction:column}.ab-hero .ht-r .about-links{flex-wrap:wrap}.ab-hero .ht-r img{aspect-ratio:5/4;max-width:none}}.ab-hero .hero-top{display:grid;grid-template-columns:1fr 560px;grid-template-rows:auto auto;column-gap:40px;row-gap:22px;align-items:center}
+.ab-hero .ht-l{grid-column:1;grid-row:1}
+.ab-hero .ht-r{display:contents}
+.ab-hero .ht-r img{grid-column:2;grid-row:1;justify-self:center}
+.ab-hero .hero-top::after{content:"";grid-column:1/-1;grid-row:2;border-top:1px solid var(--line);align-self:start}
+.ab-hero .ht-r .hm-soc{grid-column:2;grid-row:2;border-top:0 !important;margin:0 !important;padding:16px 0 0 !important}@media(max-width:900px){.ab-hero .hero-top{display:flex;flex-direction:column}.ab-hero .ht-r{display:flex;flex-direction:column}.ab-hero .hero-top::after{display:none}.ab-hero .ht-r .hm-soc{border-top:1px solid var(--line) !important;padding-top:16px !important}}.ab-hero .hero-top{align-items:start !important}
+.ab-hero .ht-l{align-self:stretch;display:flex;flex-direction:column;justify-content:space-between !important;padding-bottom:14px}
+.ab-hero .ht-l .hm-t{display:flex;flex-direction:column;justify-content:space-between;height:100%;margin-top:0 !important}
+.ab-hero .ab-title{margin:0 !important;line-height:1}
+.ab-hero .ht-l .hm-t .ab-body{margin-top:auto}
+.ab-hero .ht-r img{aspect-ratio:440/520 !important;object-position:50% 25% !important}@media(max-width:900px){.ab-hero .ht-l{padding-bottom:0}.ab-hero .ht-r img{aspect-ratio:5/4 !important}}.ab-hero .ht-r .hm-soc{grid-column:1/-1 !important;justify-self:center;width:100%;max-width:640px}@media(max-width:900px){.ab-hero .ht-r .hm-soc{max-width:none}}.ab-chat{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.ab-chat p{margin:0 !important}.ab-call{display:inline-flex;align-items:center;gap:8px;padding:0 20px;min-height:42px;white-space:nowrap}.ab-call svg{width:17px;height:17px}.ab-hero{overflow-x:clip}.ab-hero .hero-top::after{width:100vw;justify-self:start;margin-left:calc(50% - 50vw)}@media(max-width:900px){.ab-hero .ht-r .hm-soc{border-top:1px solid var(--line)}}@media(max-width:900px){.ab-hero .ht-l,.ab-hero .ht-l .hm-t,.ab-hero .ht-r{display:contents !important}.ab-hero .ht-r img{order:1;width:100%;aspect-ratio:4/5 !important;max-height:none;object-position:50% 30% !important}.ab-hero .ab-title{order:2;margin-top:8px !important}.ab-hero .ab-body{order:3;margin-top:0 !important}.ab-hero .ht-r .hm-soc{order:4}.ab-hero .hero-top{gap:18px}}@media(min-width:901px){.cb-fab{right:44px !important;bottom:30px !important}}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}
