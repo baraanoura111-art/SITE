@@ -817,7 +817,7 @@ function OasisPDF(jsPDF, A, spec){
       {n:"Address Tierra", id:"tierra", v:"487 (branded)", b:"4–6", a:"7,269–12,959", p:"8,127–22,344", s:"Chamfered, Classical, Contemporary", pl:"80/20", h:"Q2 2029"},
       {n:"Palace Ostra", id:"ostra", v:"526 (branded)", b:"4–6", a:"7,269–12,959", p:"8,113–22,460", s:"Chamfered, Classical, Contemporary", pl:"80/20", h:"Q3 2029"}
     ];
-    var ROWS = [["Villas","v"],["Bedrooms","b"],["BUA sq ft","a"],["Plot sq ft","p"],["Avg PPSF at launch","psf"],["Styles","s"],["Payment plan","pl"],["Handover","h"],["Construction","cp"]];
+    var ROWS = [["Villas","v"],["Bedrooms","b"],["BUA sq ft","a"],["Plot sq ft","p"],["Avg Sold PPSF (6 Months)","psf"],["Styles","s"],["Payment plan","pl"],["Handover","h"],["Construction","cp"]];
     if (!document.getElementById("cmpTbl")) return;
     var sel = [0, 1], pick = $("cmpPick"), tbl = $("cmpTbl");
     C.forEach(function(c, i){
@@ -994,7 +994,7 @@ function OasisPDF(jsPDF, A, spec){
         ["Payment plan", function(u){ return PLAN[u[0]][0]; }],
         ["Handover", function(u){ return PLAN[u[0]][1]; }],
         ["Construction", function(u){ var b = (M.build || {})[MK[u[0]]]; return b && b.pct ? b.pct + "%" : "–"; }],
-        ["Avg PPSF at launch", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
+        ["Avg Sold PPSF (6 Months)", function(u){ var v = (M.psf || {})[MK[u[0]]]; return v ? "AED " + Number(v).toLocaleString("en-US") : "–"; }],
         ["Floor plan", plans, "", "", "plans"],
         ["Cluster map", cmap, "", "", "map"]
       ];

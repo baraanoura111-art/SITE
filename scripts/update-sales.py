@@ -19,6 +19,29 @@ def six_months_back(d):
     if m < 1: m += 12; y -= 1
     import calendar
     return datetime.date(y, m, min(d.day, calendar.monthrange(y, m)[1]))
+PSF_KEY = {'Address Villas Tierra': 'Address Tierra', 'Palace Villas Ostra': 'Palace Ostra'}
+def update_psf(names, disp):
+    """Rewrite the psf block of assets/market.js from the 6-month window (total price / total BUA)
+    and bump the ?v= cache-buster on every page that loads market.js."""
+    import re, glob, hashlib
+    tot = {}
+    for x in disp:
+        e = tot.setdefault(names[x[1]], [0, 0]); e[0] += x[2]; e[1] += x[4]
+    new = {PSF_KEY.get(k, k): str(round(v[0] / v[1])) for k, v in tot.items()}
+    mp = os.path.join(ROOT, 'assets', 'market.js')
+    s = open(mp, encoding='utf-8').read()
+    head, rest = s.split('build: {', 1)
+    a, b = head.split('psf: {', 1)
+    b = re.sub(r'"([^"]+)": "\d*"', lambda m: '"%s": "%s"' % (m.group(1), new.get(m.group(1), '')) if m.group(1) in new else m.group(0), b)
+    s2 = a + 'psf: {' + b + 'build: {' + rest
+    if s2 == s:
+        print('market.js psf unchanged'); return
+    open(mp, 'w', encoding='utf-8').write(s2)
+    h = hashlib.md5(s2.encode('utf-8')).hexdigest()[:8]
+    for f in glob.glob(os.path.join(ROOT, '**', '*.html'), recursive=True):
+        c = open(f, encoding='utf-8').read(); c2 = re.sub(r'market\.js\?v=[0-9a-f]+', 'market.js?v=' + h, c)
+        if c != c2: open(f, 'w', encoding='utf-8').write(c2)
+    print('market.js psf updated, cache tag', h)
 def main():
     a = sys.argv[1:]
     today = datetime.date.today()
@@ -56,6 +79,7 @@ def main():
     json.dump({'updated': today.isoformat(), 'last': arc['s'][0][0], 'source': arc['source'], 'c': names, 's': disp},
               open(OUT, 'w'), ensure_ascii=False, separators=(',', ':'))
     print(f'fetched {len(new)} rows, added {len(add)}, already known {overlap}, archive {len(arc["s"])}, shown {len(disp)} (since {cut})')
+    update_psf(names, disp)
     if overlap == 0:
         print('GAP WARNING: none of the fetched rows were already known, so sales between the last update and the first fetched row may be missing.')
         sys.exit(3)
