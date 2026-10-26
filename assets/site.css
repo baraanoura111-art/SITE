@@ -1476,6 +1476,7 @@ h1,h2,h3,h4,.btn,.cp-src,.cp-txt{text-wrap:balance}h1.pg-h{text-wrap:balance}
 .btn.ab-call{background:var(--bg) !important;color:var(--brass) !important;border:1px solid var(--brass) !important;min-height:46px;padding:0 18px;gap:9px;font:400 14px var(--body);letter-spacing:.06em}.ab-call svg{width:20px;height:20px}
 .ab-hero{padding-bottom:0 !important}.ab-hero .hero-top{row-gap:0 !important}.ab-hero .hero-top::after{margin-top:40px}.ab-hero .ht-l{padding-bottom:0 !important}@media(min-width:901px){.ab-hero .ht-r .hm-soc{padding-top:81px !important}}.ab-hero ~ .wrap.about .recog,.wrap.about .recog{margin-top:40px !important;padding-top:40px !important}@media(max-width:900px){.ab-hero .ht-r .hm-soc{margin-top:40px !important;padding-top:40px !important}}
 .ab-hero .am-btns{margin:16px 0 0;justify-content:center}
+.art-deal{margin:28px 0 0;padding:0}.art-deal img{display:block;width:100%;height:auto;border:1px solid var(--box-line,var(--line));border-radius:12px;background:#000}
 .lp-soon{text-align:center;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin:0 0 14px}
 
 .lp-media{max-width:720px;margin:0 auto 30px !important}
