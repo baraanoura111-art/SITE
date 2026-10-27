@@ -20,8 +20,8 @@
     $("cResult").hidden = false; $("cEmpty").hidden = true;
 
     var dld = price * 0.04;
-    var admin = offplan ? 40 : 580, adminLbl = offplan ? "Oqood registration fee" : "Title deed fee";
-    var trustee = offplan ? 5250 : 4200;
+    var admin = 580, adminLbl = "Title deed fee";
+    var trustee = 4200;
     var agency = price * 0.021;
     var fees = dld + admin + trustee + agency;
 
@@ -837,6 +837,10 @@ function OasisPDF(jsPDF, A, spec){
       s.forEach(function(i){ h += '<th scope="col"><a href="' + ({"Palmiera 1": "/clusters/palmiera-1/", "Palmiera 2": "/clusters/palmiera-2/", "Palmiera 3": "/clusters/palmiera-3/", "Palmiera Collective": "/clusters/palmiera-collective/", "Mirage": "/clusters/mirage/", "Lavita": "/clusters/lavita/", "Marèva": "/clusters/mareva/", "Address Tierra": "/clusters/address-villas-tierra/", "Palace Ostra": "/clusters/palace-villas-ostra/"})[C[i].n] + '"></a></th>'; });
       h += '</tr></thead><tbody>';
       ROWS.forEach(function(r){ h += '<tr><th scope="row">' + r[0] + '</th>'; s.forEach(function(){ h += '<td></td>'; }); h += '</tr>'; });
+      var MAPS = {"Palmiera 1":[["cm_p1",""]],"Palmiera 2":[["cm_p2",""]],"Palmiera 3":[["cm_p3",""]],"Palmiera Collective":[["cm_pc",""]],"Mirage":[["cm_mirage",""]],"Lavita":[["cm_lavita",""]],"Marèva":[["cm_mareva"," (Marèva)"],["cm_mareva2"," (Marèva 2)"]],"Address Tierra":[["cm_tierra",""]],"Palace Ostra":[["cm_ostra",""]]};
+      h += '<tr><th scope="row">Cluster map</th>';
+      s.forEach(function(i){ h += '<td class="cv-btns">' + (MAPS[C[i].n] || []).map(function(m){ return '<a class="cv-btn" href="/images/maps/' + m[0] + '.jpg" target="_blank" rel="noopener">View Cluster Map' + m[1] + '</a>'; }).join("") + '</td>'; });
+      h += '</tr>';
       tbl.innerHTML = h + '</tbody>';
       s.forEach(function(i, col){
         tbl.querySelectorAll("thead a")[col].textContent = C[i].n;
